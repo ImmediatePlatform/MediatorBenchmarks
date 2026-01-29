@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "MediatorBenchmarks": {
+      "commandName": "Project",
+      "hotReloadEnabled": false
+    }
+  }
+}

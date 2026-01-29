@@ -1,0 +1,25 @@
+<Project>
+  <PropertyGroup>
+	<LangVersion>14</LangVersion>
+	<TargetFrameworks>net8.0;net10.0</TargetFrameworks>
+
+	<Nullable>enable</Nullable>
+	<WarningsAsErrors>$(WarningsAsErrors);nullable;</WarningsAsErrors>
+
+	<ImplicitUsings>enable</ImplicitUsings>
+
+	<AnalysisLevel>latest-all</AnalysisLevel>
+	<EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+
+	<GenerateDocumentationFile>true</GenerateDocumentationFile>
+
+	<IsPackable>false</IsPackable>
+	<WarnOnPackingNonPackableProject>false</WarnOnPackingNonPackableProject>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
+	<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+	<ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+	<EmbedUntrackedSources>true</EmbedUntrackedSources>
+  </PropertyGroup>
+</Project>

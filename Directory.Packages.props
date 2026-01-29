@@ -1,0 +1,14 @@
+<Project>
+  <PropertyGroup>
+	<ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+  </PropertyGroup>
+
+  <ItemGroup>
+	<PackageVersion Include="BenchmarkDotNet" Version="0.15.8" />
+	<PackageVersion Include="RhoMicro.BdnLogging" Version="1.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+	<GlobalPackageReference Include="Meziantou.Analyzer" Version="2.0.286" />
+  </ItemGroup>
+</Project>

@@ -19,7 +19,7 @@ public sealed record UserRegisteredEvent(string UserId, string Email)
 }
 
 // Scenario 4: FullQuery - Query with dependency injection
-public sealed record GetFullQuery(int Id)
+public record GetFullQuery(int Id)
 {
 	public static GetFullQuery Instance { get; } = new(42);
 }
@@ -34,7 +34,7 @@ public sealed record OrderCreatedEvent(int OrderId, int CustomerId);
 
 // Scenario 6: Short-circuit / Cache-hit - tests middleware that returns early without calling handler
 // Each library implements this with their idiomatic approach:
-public sealed record GetCachedOrder(int Id)
+public record GetCachedOrder(int Id)
 {
 	public static GetCachedOrder Instance { get; } = new(42);
 }

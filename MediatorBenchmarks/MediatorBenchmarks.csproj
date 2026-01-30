@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="BenchmarkDotNet" />
+    <PackageReference Include="Immediate.Handlers" />
     <PackageReference Include="RhoMicro.BdnLogging" />
   </ItemGroup>
 

@@ -1,13 +1,14 @@
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Jobs;
 using MediatorBenchmarks.Shared;
+using MediatorBenchmarks.Support;
 
 namespace MediatorBenchmarks.Direct;
 
 [SimpleJob(RuntimeMoniker.Net80)]
 [SimpleJob(RuntimeMoniker.Net10_0)]
 [MemoryDiagnoser]
-[BenchmarkCategory("Direct")]
+[Implementation("Direct")]
 public class DirectBenchmarks
 {
 	private readonly PingCommand _pingCommand = PingCommand.Instance;
@@ -26,42 +27,37 @@ public class DirectBenchmarks
 	private readonly DirectFirstOrderCreatedHandler _directFirstOrderCreatedHandler = new();
 	private readonly DirectSecondOrderCreatedHandler _directSecondOrderCreatedHandler = new();
 
-	// Scenario 1: InvokeAsync without response (Command)
 	[Benchmark]
-	[BenchmarkCategory("Command")]
+	[Scenario(Scenario.InvokeAsync)]
 	public async ValueTask Command()
 	{
 		await _directCommandHandler.HandleAsync(_pingCommand);
 	}
 
-	// Scenario 2: InvokeAsync<T> (Query)
 	[Benchmark]
-	[BenchmarkCategory("Query")]
+	[Scenario(Scenario.InvokeAsyncT)]
 	public async ValueTask<Order> Query()
 	{
 		return await _directQueryHandler.HandleAsync(_getOrder);
 	}
 
-	// Scenario 3: PublishAsync with a single handler
 	[Benchmark]
-	[BenchmarkCategory("Publish")]
+	[Scenario(Scenario.Publish)]
 	public async ValueTask Publish()
 	{
 		await _directEventHandler.HandleAsync(_userRegisteredEvent);
 		await _directSecondEventHandler.HandleAsync(_userRegisteredEvent);
 	}
 
-	// Scenario 4: InvokeAsync<T> with DI (Query with dependency injection and middleware)
 	[Benchmark]
-	[BenchmarkCategory("Full Query")]
+	[Scenario(Scenario.InvokeAsyncTWithDI)]
 	public async ValueTask<Order> FullQuery()
 	{
 		return await _directFullQueryHandler.HandleAsync(_getFullQuery);
 	}
 
-	// Scenario 5: Cascading messages - invoke returns result and auto-publishes events to multiple handlers
 	[Benchmark]
-	[BenchmarkCategory("Cascading")]
+	[Scenario(Scenario.CascadingMessages)]
 	public async Task<Order> CascadingMessages()
 	{
 		var (order, evt) = await _directCreateOrderHandler.HandleAsync(_createOrder);
@@ -70,9 +66,8 @@ public class DirectBenchmarks
 		return order;
 	}
 
-	// Scenario 6: Short-circuit middleware - returns cached result, handler is never invoked
 	[Benchmark]
-	[BenchmarkCategory("Short Circuit")]
+	[Scenario(Scenario.ShortCircuit)]
 	public async ValueTask<Order> ShortCircuit()
 	{
 		// Simulate ShortCircuitMiddleware.Before returning cached result

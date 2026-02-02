@@ -10,7 +10,7 @@ namespace MediatorBenchmarks.ImmediateHandlers;
 [SimpleJob(RuntimeMoniker.Net10_0)]
 [MemoryDiagnoser]
 [Implementation("Immediate.Handlers")]
-public class ImmediateHandlersBenchmarks
+public class ImmediateHandlersBenchmarks : IBenchmarks
 {
 	private readonly PingCommand _pingCommand = PingCommand.Instance;
 	private readonly GetOrder _getOrder = GetOrder.Instance;
@@ -75,7 +75,7 @@ public class ImmediateHandlersBenchmarks
 
 	[Benchmark]
 	[Scenario(Scenario.CascadingMessages)]
-	public async Task<Order> CascadingMessages()
+	public async ValueTask<Order> CascadingMessages()
 	{
 		return await _immediateHandlersCreateOrderConsumer.HandleAsync(_createOrder);
 	}

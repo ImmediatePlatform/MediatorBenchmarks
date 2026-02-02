@@ -11,7 +11,7 @@ namespace MediatorBenchmarks.FoundatioMediator;
 [SimpleJob(RuntimeMoniker.Net10_0)]
 [MemoryDiagnoser]
 [Implementation("Foundatio.Mediator")]
-public class FoundatioMediatorBenchmarks
+public class FoundatioMediatorBenchmarks : IBenchmarks
 {
 	private readonly PingCommand _pingCommand = PingCommand.Instance;
 	private readonly GetOrder _getOrder = GetOrder.Instance;
@@ -25,9 +25,11 @@ public class FoundatioMediatorBenchmarks
 
 	public FoundatioMediatorBenchmarks()
 	{
-		_services = new ServiceCollection()
-			.AddSingleton<IOrderService, OrderService>()
-			.AddMediator()
+		_services = MediatorExtensions
+			.AddMediator(
+				new ServiceCollection()
+					.AddSingleton<IOrderService, OrderService>()
+			)
 			.BuildServiceProvider();
 
 		_mediator = _services.GetRequiredService<IMediator>();
@@ -63,7 +65,7 @@ public class FoundatioMediatorBenchmarks
 
 	[Benchmark]
 	[Scenario(Scenario.CascadingMessages)]
-	public async Task<Order> CascadingMessages()
+	public async ValueTask<Order> CascadingMessages()
 	{
 		return await _mediator.InvokeAsync<Order>(_createOrder);
 	}

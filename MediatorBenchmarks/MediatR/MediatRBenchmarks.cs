@@ -11,7 +11,7 @@ namespace MediatorBenchmarks.MediatR;
 [SimpleJob(RuntimeMoniker.Net10_0)]
 [MemoryDiagnoser]
 [Implementation("MediatR")]
-public class MediatRBenchmarks
+public class MediatRBenchmarks : IBenchmarks
 {
 	private readonly PingCommand _pingCommand = PingCommand.Instance;
 	private readonly GetOrder _getOrder = GetOrder.Instance;
@@ -69,7 +69,7 @@ public class MediatRBenchmarks
 
 	[Benchmark]
 	[Scenario(Scenario.CascadingMessages)]
-	public async Task<Order> CascadingMessages()
+	public async ValueTask<Order> CascadingMessages()
 	{
 		return await _mediator.Send(_createOrder);
 	}

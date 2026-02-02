@@ -9,7 +9,7 @@ namespace MediatorBenchmarks.Direct;
 [SimpleJob(RuntimeMoniker.Net10_0)]
 [MemoryDiagnoser]
 [Implementation("Direct")]
-public class DirectBenchmarks
+public class DirectBenchmarks : IBenchmarks
 {
 	private readonly PingCommand _pingCommand = PingCommand.Instance;
 	private readonly GetOrder _getOrder = GetOrder.Instance;
@@ -58,7 +58,7 @@ public class DirectBenchmarks
 
 	[Benchmark]
 	[Scenario(Scenario.CascadingMessages)]
-	public async Task<Order> CascadingMessages()
+	public async ValueTask<Order> CascadingMessages()
 	{
 		var (order, evt) = await _directCreateOrderHandler.HandleAsync(_createOrder);
 		await _directFirstOrderCreatedHandler.HandleAsync(evt);

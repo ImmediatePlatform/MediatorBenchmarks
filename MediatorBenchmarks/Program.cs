@@ -17,8 +17,33 @@ BenchmarkRunner.Run(
 );
 
 #elif !RELEASE
-// TODO: Add code for unit testing
-Console.WriteLine("Benchmarks must be run in `RELEASE`");
+using MediatorBenchmarks.Direct;
+using MediatorBenchmarks.FoundatioMediator;
+using MediatorBenchmarks.ImmediateHandlers;
+using MediatorBenchmarks.MediatorNet;
+using MediatorBenchmarks.MediatR;
+using MediatorBenchmarks.Shared;
+
+var benchmarks = new List<IBenchmarks>()
+{
+	new DirectBenchmarks(),
+	new FoundatioMediatorBenchmarks(),
+	new ImmediateHandlersBenchmarks(),
+	new MediatorNetBenchmarks(),
+	new MediatRBenchmarks(),
+};
+
+foreach (var benchmark in benchmarks)
+{
+	await benchmark.Command();
+	await benchmark.Query();
+	await benchmark.Publish();
+	await benchmark.FullQuery();
+	await benchmark.CascadingMessages();
+	await benchmark.ShortCircuit();
+}
+
+Console.WriteLine("All Benchmarks operate successfully. Switch to `RELEASE` to benchmark.");
 
 #elif !NET10_0
 Console.WriteLine("Benchmarks must be run in `net10.0`");

@@ -11,7 +11,7 @@ namespace MediatorBenchmarks.MediatorNet;
 [SimpleJob(RuntimeMoniker.Net10_0)]
 [MemoryDiagnoser]
 [Implementation("MediatorNet")]
-public class MediatorNetBenchmarks
+public class MediatorNetBenchmarks : IBenchmarks
 {
 	private readonly PingCommand _pingCommand = PingCommand.Instance;
 	private readonly GetOrder _getOrder = GetOrder.Instance;
@@ -25,11 +25,14 @@ public class MediatorNetBenchmarks
 
 	public MediatorNetBenchmarks()
 	{
-		_services = new ServiceCollection()
-			.AddSingleton<IOrderService, OrderService>()
-			.AddSingleton<IPipelineBehavior<GetCachedOrder, Order>, MediatorNetShortCircuitBehavior>()
-			.AddSingleton<IPipelineBehavior<GetFullQuery, Order>, MediatorNetTimingBehavior>()
-			.AddMediator(cfg => cfg.ServiceLifetime = ServiceLifetime.Singleton)
+		_services = MediatorDependencyInjectionExtensions
+			.AddMediator(
+				new ServiceCollection()
+					.AddSingleton<IOrderService, OrderService>()
+					.AddSingleton<IPipelineBehavior<GetCachedOrder, Order>, MediatorNetShortCircuitBehavior>()
+					.AddSingleton<IPipelineBehavior<GetFullQuery, Order>, MediatorNetTimingBehavior>(),
+				cfg => cfg.ServiceLifetime = ServiceLifetime.Singleton
+			)
 			.BuildServiceProvider();
 
 		_mediator = _services.GetRequiredService<IMediator>();
@@ -37,9 +40,9 @@ public class MediatorNetBenchmarks
 
 	[Benchmark]
 	[Scenario(Scenario.InvokeAsync)]
-	public async ValueTask<Unit> Command()
+	public async ValueTask Command()
 	{
-		return await _mediator.Send(_pingCommand);
+		_ = await _mediator.Send(_pingCommand);
 	}
 
 	[Benchmark]
@@ -65,7 +68,7 @@ public class MediatorNetBenchmarks
 
 	[Benchmark]
 	[Scenario(Scenario.CascadingMessages)]
-	public async Task<Order> CascadingMessages()
+	public async ValueTask<Order> CascadingMessages()
 	{
 		return await _mediator.Send(_createOrder);
 	}

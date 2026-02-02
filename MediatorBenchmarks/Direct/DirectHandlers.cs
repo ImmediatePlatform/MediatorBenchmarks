@@ -18,7 +18,7 @@ public sealed class DirectQueryHandler
 {
 	public async ValueTask<Order> HandleAsync(GetOrder query, CancellationToken cancellationToken = default)
 	{
-		await ValueTask.FromResult(new Order(query.Id, 99.99m, DateTime.UtcNow));
+		return await ValueTask.FromResult(new Order(query.Id, 99.99m, DateTime.UtcNow));
 	}
 }
 
@@ -65,7 +65,7 @@ public sealed class DirectCreateOrderHandler
 	public async ValueTask<(Order order, OrderCreatedEvent evt)> HandleAsync(CreateOrder command, CancellationToken cancellationToken = default)
 	{
 		var order = new Order(1, command.Amount, DateTime.UtcNow);
-		return ValueTask.FromResult((order, new OrderCreatedEvent(order.Id, command.CustomerId)));
+		return await ValueTask.FromResult((order, new OrderCreatedEvent(order.Id, command.CustomerId)));
 	}
 }
 

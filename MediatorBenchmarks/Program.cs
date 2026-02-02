@@ -20,6 +20,7 @@ BenchmarkRunner.Run(
 using MediatorBenchmarks.Direct;
 using MediatorBenchmarks.FoundatioMediator;
 using MediatorBenchmarks.ImmediateHandlers;
+using MediatorBenchmarks.MassTransit;
 using MediatorBenchmarks.MediatorNet;
 using MediatorBenchmarks.MediatR;
 using MediatorBenchmarks.Shared;
@@ -29,6 +30,7 @@ var benchmarks = new List<IBenchmarks>()
 	new DirectBenchmarks(),
 	new FoundatioMediatorBenchmarks(),
 	new ImmediateHandlersBenchmarks(),
+	new MassTransitBenchmarks(),
 	new MediatorNetBenchmarks(),
 	new MediatRBenchmarks(),
 };

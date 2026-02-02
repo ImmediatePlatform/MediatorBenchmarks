@@ -45,7 +45,7 @@ public sealed class FoundatioSecondEventHandler
 
 // Scenario 4: Query handler with dependency injection
 [Handler]
-public class FoundatioFullQueryHandler(IOrderService orderService)
+public sealed class FoundatioFullQueryHandler(IOrderService orderService)
 {
 	public async ValueTask<Order> HandleAsync(GetFullQuery query, CancellationToken cancellationToken = default)
 	{
@@ -75,7 +75,7 @@ public sealed class FoundatioFirstOrderCreatedHandler
 }
 
 [Handler]
-public class FoundatioSecondOrderCreatedHandler
+public sealed class FoundatioSecondOrderCreatedHandler
 {
 	public async ValueTask HandleAsync(OrderCreatedEvent notification, CancellationToken cancellationToken = default)
 	{
@@ -85,7 +85,7 @@ public class FoundatioSecondOrderCreatedHandler
 
 // Scenario 6: Short-circuit handler (never actually called due to ShortCircuitMiddleware)
 [Handler]
-public class FoundatioShortCircuitHandler
+public sealed class FoundatioShortCircuitHandler
 {
 	public async ValueTask<Order> HandleAsync(GetCachedOrder query, CancellationToken cancellationToken = default)
 	{

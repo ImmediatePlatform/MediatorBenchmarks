@@ -1,16 +1,17 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
+	<OutputType>Exe</OutputType>
+	<ImplicitUsings>enable</ImplicitUsings>
+	<Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="BenchmarkDotNet" />
-    <PackageReference Include="Immediate.Handlers" />
-    <PackageReference Include="MediatR" />
-    <PackageReference Include="RhoMicro.BdnLogging" />
+	<PackageReference Include="BenchmarkDotNet" />
+	<PackageReference Include="Immediate.Handlers" />
+	<PackageReference Include="MediatR" />
+	<PackageReference Include="Microsoft.Extensions.DependencyInjection" />
+	<PackageReference Include="RhoMicro.BdnLogging" />
   </ItemGroup>
 
 </Project>

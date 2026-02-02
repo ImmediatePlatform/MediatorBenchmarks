@@ -1,17 +1,25 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-	<OutputType>Exe</OutputType>
-	<ImplicitUsings>enable</ImplicitUsings>
-	<Nullable>enable</Nullable>
+    <OutputType>Exe</OutputType>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <NoWarn>$(NoWarn);CS1591</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Label="Foundatio.Mediator">
+    <InterceptorsNamespaces>$(InterceptorsNamespaces);MediatorBenchmarks.FoundatioMediator</InterceptorsNamespaces>
+    <MediatorHandlerLifetime>None</MediatorHandlerLifetime>
+    <MediatorDisableConventionalDiscovery>true</MediatorDisableConventionalDiscovery>
   </PropertyGroup>
 
   <ItemGroup>
-	<PackageReference Include="BenchmarkDotNet" />
-	<PackageReference Include="Immediate.Handlers" />
+    <PackageReference Include="BenchmarkDotNet" />
+    <PackageReference Include="Foundatio.Mediator" />
+    <PackageReference Include="Immediate.Handlers" />
 	<PackageReference Include="MediatR" />
 	<PackageReference Include="Microsoft.Extensions.DependencyInjection" />
-	<PackageReference Include="RhoMicro.BdnLogging" />
+    <PackageReference Include="RhoMicro.BdnLogging" />
   </ItemGroup>
 
 </Project>

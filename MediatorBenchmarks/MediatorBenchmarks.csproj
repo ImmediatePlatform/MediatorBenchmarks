@@ -17,6 +17,8 @@
     <PackageReference Include="BenchmarkDotNet" />
     <PackageReference Include="Foundatio.Mediator" />
     <PackageReference Include="Immediate.Handlers" />
+	<PackageReference Include="Mediator.Abstractions" />
+	<PackageReference Include="Mediator.SourceGenerator" PrivateAssets="All" />
 	<PackageReference Include="MediatR" />
 	<PackageReference Include="Microsoft.Extensions.DependencyInjection" />
     <PackageReference Include="RhoMicro.BdnLogging" />

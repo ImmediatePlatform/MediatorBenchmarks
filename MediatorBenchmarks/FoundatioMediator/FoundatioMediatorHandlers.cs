@@ -11,7 +11,6 @@ public sealed class FoundatioCommandHandler
 	public async ValueTask HandleAsync(PingCommand command, CancellationToken cancellationToken = default)
 	{
 		// Simulate minimal work
-		await ValueTask.CompletedTask;
 	}
 }
 
@@ -21,7 +20,7 @@ public sealed class FoundatioQueryHandler
 {
 	public async ValueTask<Order> HandleAsync(GetOrder query, CancellationToken cancellationToken = default)
 	{
-		return await ValueTask.FromResult(new Order(query.Id, 99.99m, DateTime.UtcNow));
+		return new Order(query.Id, 99.99m, DateTime.UtcNow);
 	}
 }
 
@@ -32,7 +31,6 @@ public sealed class FoundatioEventHandler
 	public async ValueTask HandleAsync(UserRegisteredEvent notification, CancellationToken cancellationToken = default)
 	{
 		// Simulate minimal event handling work
-		await ValueTask.CompletedTask;
 	}
 }
 
@@ -42,7 +40,6 @@ public sealed class FoundatioSecondEventHandler
 	public async ValueTask HandleAsync(UserRegisteredEvent notification, CancellationToken cancellationToken = default)
 	{
 		// Second handler listening for the same event
-		await ValueTask.CompletedTask;
 	}
 }
 
@@ -63,7 +60,7 @@ public sealed class FoundatioCreateOrderHandler
 	public async ValueTask<(Order order, OrderCreatedEvent evt)> HandleAsync(CreateOrder command, CancellationToken cancellationToken = default)
 	{
 		var order = new Order(1, command.Amount, DateTime.UtcNow);
-		return await ValueTask.FromResult((order, new OrderCreatedEvent(order.Id, command.CustomerId)));
+		return (order, new OrderCreatedEvent(order.Id, command.CustomerId));
 	}
 }
 
@@ -74,7 +71,6 @@ public sealed class FoundatioFirstOrderCreatedHandler
 	public async ValueTask HandleAsync(OrderCreatedEvent notification, CancellationToken cancellationToken = default)
 	{
 		// First handler for order created event
-		await ValueTask.CompletedTask;
 	}
 }
 
@@ -84,7 +80,6 @@ public class FoundatioSecondOrderCreatedHandler
 	public async ValueTask HandleAsync(OrderCreatedEvent notification, CancellationToken cancellationToken = default)
 	{
 		// Second handler for order created event
-		await ValueTask.CompletedTask;
 	}
 }
 
@@ -130,6 +125,6 @@ public static class ShortCircuitMiddleware
 	public static async ValueTask<HandlerResult<Order>> BeforeAsync(GetCachedOrder message)
 	{
 		// Always short-circuit with cached result - simulates cache hit scenario
-		return await ValueTask.FromResult(HandlerResult.ShortCircuit(CachedOrder));
+		return HandlerResult.ShortCircuit(CachedOrder);
 	}
 }

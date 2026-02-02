@@ -11,7 +11,6 @@ public sealed partial class ImmediateHandlersCommandHandler
 	private async ValueTask Handle(PingCommand request, CancellationToken cancellationToken)
 	{
 		// Simulate minimal work
-		await ValueTask.CompletedTask;
 	}
 }
 
@@ -21,7 +20,6 @@ public sealed partial class ImmediateHandlersQueryHandler
 {
 	private async ValueTask<Order> Handle(GetOrder request, CancellationToken cancellationToken)
 	{
-		await Task.CompletedTask;
 		return new Order(request.Id, 99.99m, DateTime.UtcNow);
 	}
 }
@@ -44,7 +42,6 @@ public sealed partial class ImmediateHandlersEventHandler1
 	private async ValueTask Handle(UserRegisteredEvent notification, CancellationToken cancellationToken)
 	{
 		// Simulate minimal event handling work
-		await ValueTask.CompletedTask;
 	}
 }
 
@@ -54,7 +51,6 @@ public sealed partial class ImmediateHandlersEventHandler2
 	private async ValueTask Handle(UserRegisteredEvent notification, CancellationToken cancellationToken)
 	{
 		// Simulate minimal event handling work
-		await ValueTask.CompletedTask;
 	}
 }
 
@@ -106,7 +102,6 @@ public sealed partial class ImmediateHandlersCreatedConsumer1
 	private async ValueTask HandleAsync(OrderCreatedEvent _, CancellationToken token)
 	{
 		// First handler for order created event
-		await Task.CompletedTask;
 	}
 }
 
@@ -116,7 +111,6 @@ public sealed partial class ImmediateHandlersCreatedConsumer2
 	private async ValueTask HandleAsync(OrderCreatedEvent _, CancellationToken token)
 	{
 		// Second handler for order created event
-		await Task.CompletedTask;
 	}
 }
 

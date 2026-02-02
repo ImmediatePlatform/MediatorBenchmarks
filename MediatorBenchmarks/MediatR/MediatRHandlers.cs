@@ -9,7 +9,6 @@ public sealed class MediatRCommandHandler : IRequestHandler<PingCommand>
 	public async Task Handle(PingCommand request, CancellationToken cancellationToken)
 	{
 		// Simulate minimal work
-		await Task.CompletedTask;
 	}
 }
 
@@ -19,7 +18,7 @@ public sealed class MediatRQueryHandler : IRequestHandler<GetOrder, Order>
 	public async Task<Order> Handle(GetOrder request, CancellationToken cancellationToken)
 	{
 		// No async state machine
-		return await Task.FromResult(new Order(request.Id, 99.99m, DateTime.UtcNow));
+		return new Order(request.Id, 99.99m, DateTime.UtcNow);
 	}
 }
 
@@ -29,7 +28,6 @@ public sealed class MediatREventHandler : INotificationHandler<UserRegisteredEve
 	public async Task Handle(UserRegisteredEvent notification, CancellationToken cancellationToken)
 	{
 		// Simulate minimal event handling work
-		await Task.CompletedTask;
 	}
 }
 
@@ -38,7 +36,6 @@ public sealed class MediatREventHandler2 : INotificationHandler<UserRegisteredEv
 	public async Task Handle(UserRegisteredEvent notification, CancellationToken cancellationToken)
 	{
 		// Second handler listening for the same event
-		await Task.CompletedTask;
 	}
 }
 
@@ -68,7 +65,6 @@ public sealed class MediatROrderCreatedHandler1 : INotificationHandler<OrderCrea
 	public async Task Handle(OrderCreatedEvent notification, CancellationToken cancellationToken)
 	{
 		// First handler for order created event
-		await Task.CompletedTask;
 	}
 }
 
@@ -77,7 +73,6 @@ public sealed class MediatROrderCreatedHandler2 : INotificationHandler<OrderCrea
 	public async Task Handle(OrderCreatedEvent notification, CancellationToken cancellationToken)
 	{
 		// Second handler for order created event
-		await Task.CompletedTask;
 	}
 }
 
@@ -118,6 +113,6 @@ public sealed class ShortCircuitBehavior : IPipelineBehavior<GetCachedOrder, Ord
 	public async Task<Order> Handle(GetCachedOrder request, RequestHandlerDelegate<Order> next, CancellationToken cancellationToken)
 	{
 		// Short-circuit by returning cached value - never calls next()
-		return await Task.FromResult(_cachedOrder);
+		return _cachedOrder;
 	}
 }

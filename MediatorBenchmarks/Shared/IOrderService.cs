@@ -17,7 +17,6 @@ public sealed class OrderService : IOrderService
 	public async ValueTask<Order> GetOrderAsync(int id, CancellationToken cancellationToken = default)
 	{
 		// Simulate minimal async work
-		await Task.CompletedTask;
 		return _cachedOrder;
 	}
 }

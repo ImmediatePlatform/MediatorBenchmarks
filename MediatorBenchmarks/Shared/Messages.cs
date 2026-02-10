@@ -28,7 +28,7 @@ public sealed record UserRegisteredEvent(string UserId, string Email)
 }
 
 // Scenario 4: FullQuery - Query with dependency injection
-public record GetFullQuery(int Id)
+public sealed record GetFullQuery(int Id)
 	: global::MediatR.IRequest<Order>
 	, global::Mediator.IQuery<Order>
 {
@@ -49,7 +49,7 @@ public sealed record OrderCreatedEvent(int OrderId, int CustomerId)
 
 // Scenario 6: Short-circuit / Cache-hit - tests middleware that returns early without calling handler
 // Each library implements this with their idiomatic approach:
-public record GetCachedOrder(int Id)
+public sealed record GetCachedOrder(int Id)
 	: global::MediatR.IRequest<Order>
 	, global::Mediator.IQuery<Order>
 {

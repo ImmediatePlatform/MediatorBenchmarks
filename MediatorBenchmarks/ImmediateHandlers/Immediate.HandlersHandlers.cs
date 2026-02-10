@@ -55,10 +55,9 @@ public sealed partial class ImmediateHandlersEventHandler2
 }
 
 // Scenario 4: InvokeAsync<T> with DI (Query with dependency injection and middleware)
-public sealed class TimingBehavior<TRequest, TResponse> : Behavior<TRequest, TResponse>
-	where TRequest : GetFullQuery
+public sealed class TimingBehavior : Behavior<GetFullQuery, Order>
 {
-	public override async ValueTask<TResponse> HandleAsync(TRequest request, CancellationToken cancellationToken)
+	public override async ValueTask<Order> HandleAsync(GetFullQuery request, CancellationToken cancellationToken)
 	{
 		var stopwatch = System.Diagnostics.Stopwatch.StartNew();
 		try
@@ -73,7 +72,7 @@ public sealed class TimingBehavior<TRequest, TResponse> : Behavior<TRequest, TRe
 }
 
 [Handler]
-[Behaviors(typeof(TimingBehavior<,>))]
+[Behaviors(typeof(TimingBehavior))]
 public sealed partial class ImmediateHandlersFullQuery(IOrderService orderService)
 {
 	private async ValueTask<Order> Handle(GetFullQuery request, CancellationToken cancellationToken)
@@ -115,21 +114,19 @@ public sealed partial class ImmediateHandlersCreatedConsumer2
 }
 
 // Scenario 6: Short-circuit handler (never actually called due to ShortCircuitMiddleware)
-public sealed class ShortCircuitBehavior<TRequest, TResponse> : Behavior<TRequest, TResponse>
-	where TRequest : GetCachedOrder
-	where TResponse : Order
+public sealed class ShortCircuitBehavior : Behavior<GetCachedOrder, Order>
 {
 	private readonly Order _cachedOrder = new(999, 49.99m, DateTime.UtcNow);
 
-	public override async ValueTask<TResponse> HandleAsync(TRequest request, CancellationToken cancellationToken)
+	public override async ValueTask<Order> HandleAsync(GetCachedOrder request, CancellationToken cancellationToken)
 	{
 		// Always short-circuit with cached result - simulates cache hit scenario
-		return (TResponse)_cachedOrder;
+		return _cachedOrder;
 	}
 }
 
 [Handler]
-[Behaviors(typeof(ShortCircuitBehavior<,>))]
+[Behaviors(typeof(ShortCircuitBehavior))]
 public sealed partial class ImmediateHandlersShortCircuitHandler
 {
 	private async ValueTask<Order> Handle(GetCachedOrder request, CancellationToken cancellationToken = default)

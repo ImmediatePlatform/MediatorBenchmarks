@@ -22,7 +22,7 @@ public sealed class ImplementationColumn : IColumn
 	public int PriorityInCategory => 20;
 	public bool IsNumeric => false;
 	public UnitType UnitType => UnitType.Dimensionless;
-	public string Legend => $"Mediator Pattern Implementation";
+	public string Legend => "Mediator Pattern Implementation";
 	public string GetValue(Summary summary, BenchmarkCase benchmarkCase, SummaryStyle style) => GetValue(summary, benchmarkCase);
 }
 

@@ -30,7 +30,7 @@ public class MassTransitBenchmarks : IBenchmarks
 
 	public MassTransitBenchmarks()
 	{
-		// Setup MediatR
+		// Setup MassTransit
 		_services = DependencyInjectionRegistrationExtensions
 			.AddMediator(
 				new ServiceCollection()

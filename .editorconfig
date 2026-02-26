@@ -303,6 +303,8 @@ dotnet_diagnostic.CA1724.severity = none                # CA1724: Type names sho
 dotnet_diagnostic.CA1822.severity = none                # CA1822: Mark members as static
 
 dotnet_diagnostic.IDE0060.severity = none               # IDE0060: Remove unused parameter
+dotnet_diagnostic.IDE0390.severity = none               # IDE0390: Make method synchronous
+dotnet_diagnostic.IDE0391.severity = none               # IDE0391: Make method synchronous
 
 MA0053.public_class_should_be_sealed = true
 MA0053.exceptions_should_be_sealed = true

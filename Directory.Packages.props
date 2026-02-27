@@ -6,7 +6,7 @@
   <ItemGroup>
 	<PackageVersion Include="BenchmarkDotNet" Version="0.15.8" />
 	<PackageVersion Include="Foundatio.Mediator" Version="1.0.0-rc.9" />
-	<PackageVersion Include="Immediate.Handlers" Version="3.2.0" />
+	<PackageVersion Include="Immediate.Handlers" Version="3.3.0" />
 	<PackageVersion Include="MassTransit" Version="[8.5.7]" />
 	<PackageVersion Include="Mediator.Abstractions" Version="3.0.1" />
 	<PackageVersion Include="Mediator.SourceGenerator" Version="3.0.1" />
@@ -25,6 +25,6 @@
   </ItemGroup>
 
   <ItemGroup>
-	<GlobalPackageReference Include="Meziantou.Analyzer" Version="3.0.1" />
+	<GlobalPackageReference Include="Meziantou.Analyzer" Version="3.0.17" />
   </ItemGroup>
 </Project>

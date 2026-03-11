@@ -18,6 +18,7 @@
 	<PackageVersion Include="Mediator.SourceGenerator" Version="3.0.1" />
 	<PackageVersion Include="MediatR" Version="[12.5.0]" />
 	<PackageVersion Include="RhoMicro.BdnLogging" Version="1.0.3" />
+	<PackageVersion Include="WolverineFx" Version="5.16.0" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net8.0' ">
@@ -37,5 +38,9 @@
 
   <ItemGroup Label="Transitive Packages">
 	<PackageVersion Include="Microsoft.Diagnostics.Runtime" Version="4.0.0-beta.24360.3" />
+	<PackageVersion Include="Microsoft.CodeAnalysis" Version="5.0.0" />
+	<PackageVersion Include="Microsoft.CodeAnalysis.CSharp" Version="5.0.0" />
+	<PackageVersion Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="5.0.0" />
+	<PackageVersion Include="Microsoft.CodeAnalysis.Scripting" Version="5.0.0" />
   </ItemGroup>
 </Project>

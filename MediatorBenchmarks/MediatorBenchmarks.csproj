@@ -22,7 +22,9 @@
 	<PackageReference Include="Mediator.SourceGenerator" PrivateAssets="All" />
 	<PackageReference Include="MediatR" />
 	<PackageReference Include="Microsoft.Extensions.DependencyInjection" />
+	<PackageReference Include="Microsoft.Extensions.Hosting" />
 	<PackageReference Include="RhoMicro.BdnLogging" />
+	<PackageReference Include="WolverineFx" />
   </ItemGroup>
 
 </Project>

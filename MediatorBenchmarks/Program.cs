@@ -25,6 +25,7 @@ using MediatorBenchmarks.MassTransit;
 using MediatorBenchmarks.MediatorNet;
 using MediatorBenchmarks.MediatR;
 using MediatorBenchmarks.Shared;
+using MediatorBenchmarks.Wolverine;
 
 var benchmarks = new List<IBenchmarks>()
 {
@@ -35,6 +36,7 @@ var benchmarks = new List<IBenchmarks>()
 	new MassTransitBenchmarks(),
 	new MediatorNetBenchmarks(),
 	new MediatRBenchmarks(),
+	new WolverineBenchmarks(),
 };
 
 foreach (var benchmark in benchmarks)

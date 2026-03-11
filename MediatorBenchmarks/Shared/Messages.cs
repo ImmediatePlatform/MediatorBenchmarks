@@ -7,6 +7,7 @@ namespace MediatorBenchmarks.Shared;
 public sealed record PingCommand(string Id)
 	: global::MediatR.IRequest
 	, global::Mediator.ICommand
+	, global::DispatchR.Abstractions.Send.IRequest<PingCommand, ValueTask>
 {
 	public static PingCommand Instance { get; } = new("test-123");
 }
@@ -15,6 +16,7 @@ public sealed record PingCommand(string Id)
 public sealed record GetOrder(int Id)
 	: global::MediatR.IRequest<Order>
 	, global::Mediator.IQuery<Order>
+	, global::DispatchR.Abstractions.Send.IRequest<GetOrder, ValueTask<Order>>
 {
 	public static GetOrder Instance { get; } = new(42);
 }
@@ -23,6 +25,7 @@ public sealed record GetOrder(int Id)
 public sealed record UserRegisteredEvent(string UserId, string Email)
 	: global::MediatR.INotification
 	, global::Mediator.INotification
+	, global::DispatchR.Abstractions.Notification.INotification
 {
 	public static UserRegisteredEvent Instance { get; } = new("User-456", "test@example.com");
 }
@@ -31,6 +34,7 @@ public sealed record UserRegisteredEvent(string UserId, string Email)
 public sealed record GetFullQuery(int Id)
 	: global::MediatR.IRequest<Order>
 	, global::Mediator.IQuery<Order>
+	, global::DispatchR.Abstractions.Send.IRequest<GetFullQuery, ValueTask<Order>>
 {
 	public static GetFullQuery Instance { get; } = new(42);
 }
@@ -39,19 +43,22 @@ public sealed record GetFullQuery(int Id)
 public sealed record CreateOrder(int CustomerId, decimal Amount)
 	: global::MediatR.IRequest<Order>
 	, global::Mediator.IRequest<Order>
+	, global::DispatchR.Abstractions.Send.IRequest<CreateOrder, ValueTask<Order>>
 {
 	public static CreateOrder Instance { get; } = new(123, 99.99m);
 }
 
 public sealed record OrderCreatedEvent(int OrderId, int CustomerId)
 	: global::MediatR.INotification
-	, global::Mediator.INotification;
+	, global::Mediator.INotification
+	, global::DispatchR.Abstractions.Notification.INotification;
 
 // Scenario 6: Short-circuit / Cache-hit - tests middleware that returns early without calling handler
 // Each library implements this with their idiomatic approach:
 public sealed record GetCachedOrder(int Id)
 	: global::MediatR.IRequest<Order>
 	, global::Mediator.IQuery<Order>
+	, global::DispatchR.Abstractions.Send.IRequest<GetCachedOrder, ValueTask<Order>>
 {
 	public static GetCachedOrder Instance { get; } = new(42);
 }

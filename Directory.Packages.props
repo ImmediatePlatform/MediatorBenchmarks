@@ -5,6 +5,7 @@
 
   <ItemGroup>
 	<PackageVersion Include="BenchmarkDotNet" Version="0.15.8" />
+	<PackageVersion Include="DispatchR.Mediator" Version="2.1.1" />
 	<PackageVersion Include="Foundatio.Mediator" Version="1.0.0" />
 	<PackageVersion Include="Immediate.Handlers" Version="3.3.0" />
 	<PackageVersion Include="MassTransit" Version="[8.5.7]" />

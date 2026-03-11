@@ -10,6 +10,7 @@ namespace MediatorBenchmarks.DispatchR;
 
 [SimpleJob(RuntimeMoniker.Net80)]
 [SimpleJob(RuntimeMoniker.Net10_0)]
+[SimpleJob(RuntimeMoniker.Net11_0)]
 [MemoryDiagnoser]
 [Implementation("DispatchR")]
 public class DispatchRBenchmarks : IBenchmarks

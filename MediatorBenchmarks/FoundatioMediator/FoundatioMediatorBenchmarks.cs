@@ -9,6 +9,7 @@ namespace MediatorBenchmarks.FoundatioMediator;
 
 [SimpleJob(RuntimeMoniker.Net80)]
 [SimpleJob(RuntimeMoniker.Net10_0)]
+[SimpleJob(RuntimeMoniker.Net11_0)]
 [MemoryDiagnoser]
 [Implementation("Foundatio.Mediator")]
 public class FoundatioMediatorBenchmarks : IBenchmarks

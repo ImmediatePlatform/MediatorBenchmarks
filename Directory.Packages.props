@@ -1,10 +1,15 @@
 <Project>
   <PropertyGroup>
 	<ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+	<CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
   </PropertyGroup>
 
   <ItemGroup>
-	<PackageVersion Include="BenchmarkDotNet" Version="0.15.8" />
+	<GlobalPackageReference Include="Meziantou.Analyzer" Version="3.0.22" />
+  </ItemGroup>
+
+  <ItemGroup>
+	<PackageVersion Include="BenchmarkDotNet" Version="0.16.0-nightly.20260310.466" />
 	<PackageVersion Include="DispatchR.Mediator" Version="2.1.1" />
 	<PackageVersion Include="Foundatio.Mediator" Version="1.0.0" />
 	<PackageVersion Include="Immediate.Handlers" Version="3.3.0" />
@@ -30,7 +35,7 @@
 	<PackageVersion Include="Microsoft.Extensions.Hosting" Version="11.0.0-preview.2.26159.112" />
   </ItemGroup>
 
-  <ItemGroup>
-	<GlobalPackageReference Include="Meziantou.Analyzer" Version="3.0.22" />
+  <ItemGroup Label="Transitive Packages">
+	<PackageVersion Include="Microsoft.Diagnostics.Runtime" Version="4.0.0-beta.24360.3" />
   </ItemGroup>
 </Project>

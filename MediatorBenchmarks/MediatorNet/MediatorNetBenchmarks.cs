@@ -9,6 +9,7 @@ namespace MediatorBenchmarks.MediatorNet;
 
 [SimpleJob(RuntimeMoniker.Net80)]
 [SimpleJob(RuntimeMoniker.Net10_0)]
+[SimpleJob(RuntimeMoniker.Net11_0)]
 [MemoryDiagnoser]
 [Implementation("MediatorNet")]
 public class MediatorNetBenchmarks : IBenchmarks

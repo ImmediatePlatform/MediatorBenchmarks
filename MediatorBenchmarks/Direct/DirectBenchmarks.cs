@@ -7,6 +7,7 @@ namespace MediatorBenchmarks.Direct;
 
 [SimpleJob(RuntimeMoniker.Net80)]
 [SimpleJob(RuntimeMoniker.Net10_0)]
+[SimpleJob(RuntimeMoniker.Net11_0)]
 [MemoryDiagnoser]
 [Implementation("Direct")]
 public class DirectBenchmarks : IBenchmarks

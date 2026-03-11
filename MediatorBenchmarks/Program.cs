@@ -1,4 +1,4 @@
-#if RELEASE && NET10_0
+#if RELEASE && NET10_0_OR_GREATER
 using System.Reflection;
 using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Running;
@@ -49,7 +49,7 @@ foreach (var benchmark in benchmarks)
 
 Console.WriteLine("All Benchmarks operate successfully. Switch to `RELEASE` to benchmark.");
 
-#elif !NET10_0
+#elif !NET10_0_OR_GREATER
 Console.WriteLine("Benchmarks must be run in `net10.0`");
 
 #endif

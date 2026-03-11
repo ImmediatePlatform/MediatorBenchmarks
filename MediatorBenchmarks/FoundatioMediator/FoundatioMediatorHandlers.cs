@@ -2,6 +2,8 @@ using System.Diagnostics;
 using Foundatio.Mediator;
 using MediatorBenchmarks.Shared;
 
+[assembly: MediatorConfiguration(HandlerDiscovery = HandlerDiscovery.Explicit, HandlerLifetime = MediatorLifetime.Transient)]
+
 namespace MediatorBenchmarks.FoundatioMediator;
 
 // Scenario 1: Command handler (InvokeAsync without response)

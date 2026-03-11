@@ -5,7 +5,7 @@
 
   <ItemGroup>
 	<PackageVersion Include="BenchmarkDotNet" Version="0.15.8" />
-	<PackageVersion Include="Foundatio.Mediator" Version="1.0.0-rc.9" />
+	<PackageVersion Include="Foundatio.Mediator" Version="1.0.0" />
 	<PackageVersion Include="Immediate.Handlers" Version="3.3.0" />
 	<PackageVersion Include="MassTransit" Version="[8.5.7]" />
 	<PackageVersion Include="Mediator.Abstractions" Version="3.0.1" />
@@ -24,7 +24,12 @@
 	<PackageVersion Include="Microsoft.Extensions.Hosting" Version="10.0.3" />
   </ItemGroup>
 
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net11.0' ">
+	<PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="11.0.0-preview.2.26159.112" />
+	<PackageVersion Include="Microsoft.Extensions.Hosting" Version="11.0.0-preview.2.26159.112" />
+  </ItemGroup>
+
   <ItemGroup>
-	<GlobalPackageReference Include="Meziantou.Analyzer" Version="3.0.17" />
+	<GlobalPackageReference Include="Meziantou.Analyzer" Version="3.0.22" />
   </ItemGroup>
 </Project>

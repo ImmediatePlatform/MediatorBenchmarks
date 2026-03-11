@@ -7,10 +7,9 @@
 	<NoWarn>$(NoWarn);CS1591</NoWarn>
   </PropertyGroup>
 
-  <PropertyGroup Label="Foundatio.Mediator">
-	<InterceptorsNamespaces>$(InterceptorsNamespaces);MediatorBenchmarks.FoundatioMediator</InterceptorsNamespaces>
-	<MediatorHandlerLifetime>None</MediatorHandlerLifetime>
-	<MediatorDisableConventionalDiscovery>true</MediatorDisableConventionalDiscovery>
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net11.0'">
+	<Features>runtime-async=on</Features>
+	<EnablePreviewFeatures>true</EnablePreviewFeatures>
   </PropertyGroup>
 
   <ItemGroup>

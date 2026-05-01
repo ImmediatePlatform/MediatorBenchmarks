@@ -26,12 +26,12 @@ public class FoundatioMediatorBenchmarks : IBenchmarks
 
 	public FoundatioMediatorBenchmarks()
 	{
-		_services = MediatorExtensions
-			.AddMediator(
-				new ServiceCollection()
-					.AddSingleton<IOrderService, OrderService>()
-			)
-			.BuildServiceProvider();
+		var services = new ServiceCollection()
+			.AddSingleton<IOrderService, OrderService>();
+
+		_ = MediatorExtensions.AddMediator(services);
+
+		_services = services.BuildServiceProvider();
 
 		_mediator = _services.GetRequiredService<IMediator>();
 	}

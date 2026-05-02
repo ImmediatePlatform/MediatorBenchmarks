@@ -19,7 +19,7 @@ public sealed class MediatorNetQueryHandler : IQueryHandler<GetOrder, Order>
 {
 	public async ValueTask<Order> Handle(GetOrder query, CancellationToken cancellationToken)
 	{
-		return await ValueTask.FromResult(new Order(query.Id, 99.99m, DateTime.UtcNow));
+		return new Order(query.Id, 99.99m, DateTime.UtcNow);
 	}
 }
 
@@ -40,7 +40,7 @@ public sealed class MediatorNetEventHandler2 : INotificationHandler<UserRegister
 	}
 }
 
-// Scenario 4: Query handler with dependency injection
+// Scenario 4: InvokeAsync<T> with DI (Query with dependency injection and middleware)
 public sealed class MediatorNetFullQueryHandler(IOrderService orderService) : IQueryHandler<GetFullQuery, Order>
 {
 	public async ValueTask<Order> Handle(GetFullQuery query, CancellationToken cancellationToken)
@@ -49,7 +49,6 @@ public sealed class MediatorNetFullQueryHandler(IOrderService orderService) : IQ
 	}
 }
 
-// MediatorNet timing behavior for FullQuery benchmark (equivalent to Foundatio's TimingMiddleware)
 public sealed class MediatorNetTimingBehavior : IPipelineBehavior<GetFullQuery, Order>
 {
 	public async ValueTask<Order> Handle(GetFullQuery message, MessageHandlerDelegate<GetFullQuery, Order> next, CancellationToken cancellationToken)

@@ -21,7 +21,7 @@ public sealed class DispatchRQueryHandler : IRequestHandler<GetOrder, ValueTask<
 	public async ValueTask<Order> Handle(GetOrder request, CancellationToken cancellationToken)
 	{
 		// No async state machine
-		return await ValueTask.FromResult(new Order(request.Id, 99.99m, DateTime.UtcNow));
+		return new Order(request.Id, 99.99m, DateTime.UtcNow);
 	}
 }
 
@@ -44,16 +44,15 @@ public sealed class DispatchREventHandler2 : INotificationHandler<UserRegistered
 	}
 }
 
-// Scenario 4: Query handler with dependency injection
+// Scenario 4: InvokeAsync<T> with DI (Query with dependency injection and middleware)
 public sealed class DispatchRFullQueryHandler(IOrderService orderService) : IRequestHandler<GetFullQuery, ValueTask<Order>>
 {
 	public async ValueTask<Order> Handle(GetFullQuery request, CancellationToken cancellationToken)
 	{
-		return await orderService.GetOrderAsync(request.Id, cancellationToken).AsTask();
+		return await orderService.GetOrderAsync(request.Id, cancellationToken);
 	}
 }
 
-// DispatchR pipeline behavior for timing (equivalent to Foundatio's middleware)
 public sealed class TimingBehavior : IPipelineBehavior<GetFullQuery, ValueTask<Order>>
 {
 	public required IRequestHandler<GetFullQuery, ValueTask<Order>> NextPipeline { get; set; }
@@ -123,6 +122,6 @@ public sealed class ShortCircuitBehavior : IPipelineBehavior<GetCachedOrder, Val
 	public async ValueTask<Order> Handle(GetCachedOrder request, CancellationToken cancellationToken)
 	{
 		// Short-circuit by returning cached value - never calls next()
-		return await ValueTask.FromResult(_cachedOrder);
+		return _cachedOrder;
 	}
 }

@@ -39,12 +39,12 @@ public sealed class MediatREventHandler2 : INotificationHandler<UserRegisteredEv
 	}
 }
 
-// Scenario 4: Query handler with dependency injection
+// Scenario 4: InvokeAsync<T> with DI (Query with dependency injection and middleware)
 public sealed class MediatRFullQueryHandler(IOrderService orderService) : IRequestHandler<GetFullQuery, Order>
 {
 	public async Task<Order> Handle(GetFullQuery request, CancellationToken cancellationToken)
 	{
-		return await orderService.GetOrderAsync(request.Id, cancellationToken).AsTask();
+		return await orderService.GetOrderAsync(request.Id, cancellationToken);
 	}
 }
 

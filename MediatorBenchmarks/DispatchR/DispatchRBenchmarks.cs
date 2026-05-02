@@ -27,7 +27,7 @@ public class DispatchRBenchmarks : IBenchmarks
 
 	public DispatchRBenchmarks()
 	{
-		// Setup MediatR
+		// Setup DispatchR
 		_services = new ServiceCollection()
 			.AddSingleton<IOrderService, OrderService>()
 			.AddDispatchR(cfg =>

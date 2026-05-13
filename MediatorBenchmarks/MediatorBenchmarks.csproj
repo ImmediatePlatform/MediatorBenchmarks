@@ -13,6 +13,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+	<PackageReference Include="Axent.Core" />
 	<PackageReference Include="BenchmarkDotNet" />
     <PackageReference Include="DispatchR.Mediator" />
 	<PackageReference Include="Foundatio.Mediator" />

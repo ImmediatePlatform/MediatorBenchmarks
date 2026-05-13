@@ -8,6 +8,7 @@ public sealed record PingCommand(string Id)
 	: global::MediatR.IRequest
 	, global::Mediator.ICommand
 	, global::DispatchR.Abstractions.Send.IRequest<PingCommand, ValueTask>
+	, global::Axent.Abstractions.Requests.IRequest<global::Axent.Abstractions.Models.Unit>
 {
 	public static PingCommand Instance { get; } = new("test-123");
 }
@@ -17,6 +18,8 @@ public sealed record GetOrder(int Id)
 	: global::MediatR.IRequest<Order>
 	, global::Mediator.IQuery<Order>
 	, global::DispatchR.Abstractions.Send.IRequest<GetOrder, ValueTask<Order>>
+	, global::Axent.Abstractions.Requests.IRequest<Order>
+	, global::Axent.Abstractions.Requests.IRequest<global::Axent.Abstractions.Models.Unit>
 {
 	public static GetOrder Instance { get; } = new(42);
 }
@@ -35,6 +38,7 @@ public sealed record GetFullQuery(int Id)
 	: global::MediatR.IRequest<Order>
 	, global::Mediator.IQuery<Order>
 	, global::DispatchR.Abstractions.Send.IRequest<GetFullQuery, ValueTask<Order>>
+	, global::Axent.Abstractions.Requests.IRequest<Order>
 {
 	public static GetFullQuery Instance { get; } = new(42);
 }
@@ -59,6 +63,7 @@ public sealed record GetCachedOrder(int Id)
 	: global::MediatR.IRequest<Order>
 	, global::Mediator.IQuery<Order>
 	, global::DispatchR.Abstractions.Send.IRequest<GetCachedOrder, ValueTask<Order>>
+	, global::Axent.Abstractions.Requests.IRequest<Order>
 {
 	public static GetCachedOrder Instance { get; } = new(42);
 }

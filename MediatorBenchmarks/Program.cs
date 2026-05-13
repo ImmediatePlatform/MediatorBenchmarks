@@ -17,6 +17,7 @@ BenchmarkRunner.Run(
 );
 
 #elif !RELEASE
+using MediatorBenchmarks.Axent;
 using MediatorBenchmarks.Direct;
 using MediatorBenchmarks.DispatchR;
 using MediatorBenchmarks.FoundatioMediator;
@@ -29,6 +30,7 @@ using MediatorBenchmarks.Wolverine;
 
 var benchmarks = new List<IBenchmarks>()
 {
+	new AxentBenchmarks(),
 	new DirectBenchmarks(),
 	new DispatchRBenchmarks(),
 	new FoundatioMediatorBenchmarks(),

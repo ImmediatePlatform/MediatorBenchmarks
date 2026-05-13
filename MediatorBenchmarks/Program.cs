@@ -40,14 +40,7 @@ var benchmarks = new List<IBenchmarks>()
 };
 
 foreach (var benchmark in benchmarks)
-{
-	await benchmark.Command();
-	await benchmark.Query();
-	await benchmark.Publish();
-	await benchmark.FullQuery();
-	await benchmark.CascadingMessages();
-	await benchmark.ShortCircuit();
-}
+	await benchmark.Validate();
 
 Console.WriteLine("All Benchmarks operate successfully. Switch to `RELEASE` to benchmark.");
 

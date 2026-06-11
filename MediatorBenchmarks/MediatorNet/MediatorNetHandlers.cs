@@ -19,7 +19,7 @@ public sealed class MediatorNetQueryHandler : IQueryHandler<GetOrder, Order>
 {
 	public async ValueTask<Order> Handle(GetOrder query, CancellationToken cancellationToken)
 	{
-		return new Order(query.Id, 99.99m, DateTime.UtcNow);
+		return new Order(query.Id, 99.99m);
 	}
 }
 
@@ -71,7 +71,7 @@ public sealed class MediatorNetCreateOrderHandler(IMediator mediator) : IRequest
 {
 	public async ValueTask<Order> Handle(CreateOrder request, CancellationToken cancellationToken)
 	{
-		var order = new Order(1, request.Amount, DateTime.UtcNow);
+		var order = new Order(1, request.Amount);
 		await mediator.Publish(new OrderCreatedEvent(order.Id, request.CustomerId), cancellationToken);
 		return order;
 	}
@@ -107,7 +107,7 @@ public sealed class MediatorNetShortCircuitHandler : IQueryHandler<GetCachedOrde
 // MediatorNet short-circuit behavior - returns cached value without calling handler
 public sealed class MediatorNetShortCircuitBehavior : IPipelineBehavior<GetCachedOrder, Order>
 {
-	private readonly Order _cachedOrder = new(999, 49.99m, DateTime.UtcNow);
+	private readonly Order _cachedOrder = new(999, 49.99m);
 
 	public async ValueTask<Order> Handle(GetCachedOrder message, MessageHandlerDelegate<GetCachedOrder, Order> next, CancellationToken cancellationToken)
 	{

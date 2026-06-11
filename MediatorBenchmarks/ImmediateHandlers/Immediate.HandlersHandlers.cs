@@ -20,7 +20,7 @@ public sealed partial class ImmediateHandlersQueryHandler
 {
 	private async ValueTask<Order> Handle(GetOrder request, CancellationToken cancellationToken)
 	{
-		return new Order(request.Id, 99.99m, DateTime.UtcNow);
+		return new Order(request.Id, 99.99m);
 	}
 }
 
@@ -87,7 +87,7 @@ public sealed partial class ImmediateHandlersCreateOrderConsumer(Publisher<Order
 {
 	private async ValueTask<Order> HandleAsync(CreateOrder createOrder, CancellationToken token)
 	{
-		var order = new Order(1, createOrder.Amount, DateTime.UtcNow);
+		var order = new Order(1, createOrder.Amount);
 		await publisher.Publish(new OrderCreatedEvent(order.Id, createOrder.CustomerId), token);
 
 		return order;
@@ -116,7 +116,7 @@ public sealed partial class ImmediateHandlersCreatedConsumer2
 // Scenario 6: Short-circuit handler (never actually called due to ShortCircuitMiddleware)
 public sealed class ShortCircuitBehavior : Behavior<GetCachedOrder, Order>
 {
-	private readonly Order _cachedOrder = new(999, 49.99m, DateTime.UtcNow);
+	private readonly Order _cachedOrder = new(999, 49.99m);
 
 	public override async ValueTask<Order> HandleAsync(GetCachedOrder request, CancellationToken cancellationToken)
 	{

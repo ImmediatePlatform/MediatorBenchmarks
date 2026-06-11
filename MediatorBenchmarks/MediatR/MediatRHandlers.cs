@@ -18,7 +18,7 @@ public sealed class MediatRQueryHandler : IRequestHandler<GetOrder, Order>
 	public async Task<Order> Handle(GetOrder request, CancellationToken cancellationToken)
 	{
 		// No async state machine
-		return new Order(request.Id, 99.99m, DateTime.UtcNow);
+		return new Order(request.Id, 99.99m);
 	}
 }
 
@@ -53,7 +53,7 @@ public sealed class MediatRCreateOrderHandler(IMediator mediator) : IRequestHand
 {
 	public async Task<Order> Handle(CreateOrder request, CancellationToken cancellationToken)
 	{
-		var order = new Order(1, request.Amount, DateTime.UtcNow);
+		var order = new Order(1, request.Amount);
 		await mediator.Publish(new OrderCreatedEvent(order.Id, request.CustomerId), cancellationToken);
 		return order;
 	}
@@ -108,7 +108,7 @@ public sealed class MediatRShortCircuitHandler : IRequestHandler<GetCachedOrder,
 // MediatR short-circuit behavior - returns cached value without calling handler
 public sealed class ShortCircuitBehavior : IPipelineBehavior<GetCachedOrder, Order>
 {
-	private readonly Order _cachedOrder = new(999, 49.99m, DateTime.UtcNow);
+	private readonly Order _cachedOrder = new(999, 49.99m);
 
 	public async Task<Order> Handle(GetCachedOrder request, RequestHandlerDelegate<Order> next, CancellationToken cancellationToken)
 	{

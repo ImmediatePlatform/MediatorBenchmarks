@@ -21,7 +21,7 @@ public sealed class DispatchRQueryHandler : IRequestHandler<GetOrder, ValueTask<
 	public async ValueTask<Order> Handle(GetOrder request, CancellationToken cancellationToken)
 	{
 		// No async state machine
-		return new Order(request.Id, 99.99m, DateTime.UtcNow);
+		return new Order(request.Id, 99.99m);
 	}
 }
 
@@ -77,7 +77,7 @@ public sealed class DispatchRCreateOrderHandler(IMediator mediator) : IRequestHa
 {
 	public async ValueTask<Order> Handle(CreateOrder request, CancellationToken cancellationToken)
 	{
-		var order = new Order(1, request.Amount, DateTime.UtcNow);
+		var order = new Order(1, request.Amount);
 		await mediator.Publish(new OrderCreatedEvent(order.Id, request.CustomerId), cancellationToken);
 		return order;
 	}
@@ -115,7 +115,7 @@ public sealed class DispatchRShortCircuitHandler : IRequestHandler<GetCachedOrde
 // DispatchR short-circuit behavior - returns cached value without calling handler
 public sealed class ShortCircuitBehavior : IPipelineBehavior<GetCachedOrder, ValueTask<Order>>
 {
-	private readonly Order _cachedOrder = new(999, 49.99m, DateTime.UtcNow);
+	private readonly Order _cachedOrder = new(999, 49.99m);
 
 	public required IRequestHandler<GetCachedOrder, ValueTask<Order>> NextPipeline { get; set; }
 

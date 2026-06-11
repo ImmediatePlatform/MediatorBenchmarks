@@ -1,8 +1,8 @@
 namespace MediatorBenchmarks.Shared;
 
-public sealed record Order(int Id, decimal Amount, DateTime Date)
+public sealed record Order(int Id, decimal Amount)
 {
-	public static Order Instance { get; } = new(999, 49.99m, DateTime.UtcNow);
+	public static Order Instance { get; } = new(999, 49.99m);
 }
 
 public interface IOrderService

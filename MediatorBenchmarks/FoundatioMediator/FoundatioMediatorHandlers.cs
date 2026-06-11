@@ -22,7 +22,7 @@ public sealed class FoundatioQueryHandler
 {
 	public async ValueTask<Order> HandleAsync(GetOrder query, CancellationToken cancellationToken = default)
 	{
-		return new Order(query.Id, 99.99m, DateTime.UtcNow);
+		return new Order(query.Id, 99.99m);
 	}
 }
 
@@ -61,7 +61,7 @@ public sealed class FoundatioCreateOrderHandler
 {
 	public async ValueTask<(Order order, OrderCreatedEvent evt)> HandleAsync(CreateOrder command, CancellationToken cancellationToken = default)
 	{
-		var order = new Order(1, command.Amount, DateTime.UtcNow);
+		var order = new Order(1, command.Amount);
 		return (order, new OrderCreatedEvent(order.Id, command.CustomerId));
 	}
 }
@@ -122,7 +122,7 @@ public static class TimingMiddleware
 [Middleware]
 public static class ShortCircuitMiddleware
 {
-	private static readonly Order CachedOrder = new(999, 49.99m, DateTime.UtcNow);
+	private static readonly Order CachedOrder = new(999, 49.99m);
 
 	public static async ValueTask<HandlerResult<Order>> BeforeAsync(GetCachedOrder message)
 	{

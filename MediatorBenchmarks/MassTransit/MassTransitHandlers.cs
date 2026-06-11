@@ -18,7 +18,7 @@ public sealed class MassTransitQueryConsumer : IConsumer<GetOrder>
 {
 	public async Task Consume(ConsumeContext<GetOrder> context)
 	{
-		await context.RespondAsync(new Order(context.Message.Id, 99.99m, DateTime.UtcNow));
+		await context.RespondAsync(new Order(context.Message.Id, 99.99m));
 	}
 }
 
@@ -77,7 +77,7 @@ public sealed class MassTransitCreateOrderConsumer : IConsumer<CreateOrder>
 {
 	public async Task Consume(ConsumeContext<CreateOrder> context)
 	{
-		var order = new Order(1, context.Message.Amount, DateTime.UtcNow);
+		var order = new Order(1, context.Message.Amount);
 		await context.Publish(new OrderCreatedEvent(order.Id, context.Message.CustomerId));
 		await context.RespondAsync(order);
 	}
@@ -114,7 +114,7 @@ public sealed class MassTransitShortCircuitConsumer : IConsumer<GetCachedOrder>
 // Must be generic for UseConsumeFilter registration, but only short-circuits GetCachedOrder
 public sealed class MassTransitShortCircuitFilter<T> : IFilter<ConsumeContext<T>> where T : class
 {
-	private readonly Order _cachedOrder = new(999, 49.99m, DateTime.UtcNow);
+	private readonly Order _cachedOrder = new(999, 49.99m);
 
 	public async Task Send(ConsumeContext<T> context, IPipe<ConsumeContext<T>> next)
 	{

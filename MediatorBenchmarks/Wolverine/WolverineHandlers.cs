@@ -17,7 +17,7 @@ public sealed class WolverineQueryHandler
 {
 	public async ValueTask<Order> Handle(GetOrder query)
 	{
-		return new Order(query.Id, 99.99m, DateTime.UtcNow);
+		return new Order(query.Id, 99.99m);
 	}
 }
 
@@ -67,7 +67,7 @@ public sealed class WolverineCreateOrderHandler
 {
 	public async ValueTask<(Order, OrderCreatedEvent)> Handle(CreateOrder command)
 	{
-		var order = new Order(1, command.Amount, DateTime.UtcNow);
+		var order = new Order(1, command.Amount);
 		return (order, new OrderCreatedEvent(order.Id, command.CustomerId));
 	}
 }
@@ -102,7 +102,7 @@ public sealed class WolverineShortCircuitHandler
 // Wolverine short-circuit middleware - uses HandlerContinuation to stop processing
 public static class WolverineShortCircuitMiddleware
 {
-	private static readonly Order CachedOrder = new(999, 49.99m, DateTime.UtcNow);
+	private static readonly Order CachedOrder = new(999, 49.99m);
 
 	// Wolverine Before method with async async ValueTask tuple return for short-circuit
 	public static async ValueTask<(HandlerContinuation, Order)> BeforeAsync(GetCachedOrder message)

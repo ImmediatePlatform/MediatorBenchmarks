@@ -21,7 +21,7 @@ public sealed class AxentQueryHandler : IRequestHandler<GetOrder, Order>
 {
 	public async ValueTask<Response<Order>> HandleAsync(RequestContext<GetOrder> context, CancellationToken cancellationToken = default)
 	{
-		return Response.Success(new Order(context.Request.Id, 99.99m, DateTime.UtcNow));
+		return Response.Success(new Order(context.Request.Id, 99.99m));
 	}
 }
 
@@ -70,7 +70,7 @@ public sealed class AxentShortCircuitHandler : IRequestHandler<GetCachedOrder, O
 // Axent short-circuit behavior - returns cached value without calling handler
 public sealed class ShortCircuitBehavior : IAxentPipe<GetCachedOrder, Order>
 {
-	private readonly Order _cachedOrder = new(999, 49.99m, DateTime.UtcNow);
+	private readonly Order _cachedOrder = new(999, 49.99m);
 
 	public async ValueTask<Response<Order>> ProcessAsync(IPipelineChain<GetCachedOrder, Order> chain, RequestContext<GetCachedOrder> context, CancellationToken cancellationToken = default)
 	{

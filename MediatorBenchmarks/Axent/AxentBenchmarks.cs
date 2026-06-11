@@ -9,7 +9,6 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace MediatorBenchmarks.Axent;
 
-[SimpleJob(RuntimeMoniker.Net80)]
 [SimpleJob(RuntimeMoniker.Net10_0)]
 [SimpleJob(RuntimeMoniker.Net11_0)]
 [MemoryDiagnoser]

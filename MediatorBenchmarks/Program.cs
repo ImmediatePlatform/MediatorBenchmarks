@@ -3,11 +3,10 @@ using System.Reflection;
 using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Running;
 using MediatorBenchmarks.Support;
-using RhoMicro.BdnLogging;
 
-BenchmarkRunner.Run(
+await BenchmarkRunner.RunAsync(
 	Assembly.GetExecutingAssembly(),
-	SpotlightConfig.Instance
+	BenchmarkConfig.Instance
 		.HideColumns(["Job", "StdDev", "RatioSD", "Alloc Ratio"])
 		.AddColumn(new ImplementationColumn())
 		.AddColumn(new ScenarioColumn())
@@ -17,28 +16,23 @@ BenchmarkRunner.Run(
 );
 
 #elif !RELEASE
-using MediatorBenchmarks.Axent;
-using MediatorBenchmarks.Direct;
-using MediatorBenchmarks.DispatchR;
-using MediatorBenchmarks.FoundatioMediator;
-using MediatorBenchmarks.ImmediateHandlers;
-using MediatorBenchmarks.MassTransit;
-using MediatorBenchmarks.MediatorNet;
-using MediatorBenchmarks.MediatR;
 using MediatorBenchmarks.Shared;
-using MediatorBenchmarks.Wolverine;
 
 var benchmarks = new List<IBenchmarks>()
 {
-	new AxentBenchmarks(),
-	new DirectBenchmarks(),
-	new DispatchRBenchmarks(),
-	new FoundatioMediatorBenchmarks(),
-	new ImmediateHandlersBenchmarks(),
-	new MassTransitBenchmarks(),
-	new MediatorNetBenchmarks(),
-	new MediatRBenchmarks(),
-	new WolverineBenchmarks(),
+#if NET10_0_OR_GREATER
+	new MediatorBenchmarks.Axent.AxentBenchmarks(),
+#endif
+	new MediatorBenchmarks.Direct.DirectBenchmarks(),
+	new MediatorBenchmarks.DispatchR.DispatchRBenchmarks(),
+	new MediatorBenchmarks.FoundatioMediator.FoundatioMediatorBenchmarks(),
+	new MediatorBenchmarks.ImmediateHandlers.ImmediateHandlersBenchmarks(),
+	new MediatorBenchmarks.MassTransit.MassTransitBenchmarks(),
+	new MediatorBenchmarks.MediatorNet.MediatorNetBenchmarks(),
+	new MediatorBenchmarks.MediatR.MediatRBenchmarks(),
+#if NET10_0_OR_GREATER
+	new MediatorBenchmarks.Wolverine.WolverineBenchmarks(),
+#endif
 };
 
 foreach (var benchmark in benchmarks)

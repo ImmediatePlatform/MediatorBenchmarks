@@ -20,6 +20,7 @@ public class FoundatioMediatorBenchmarks : IBenchmarks
 	private readonly UserRegisteredEvent _userRegisteredEvent = UserRegisteredEvent.Instance;
 	private readonly CreateOrder _createOrder = CreateOrder.Instance;
 	private readonly GetCachedOrder _getCachedOrder = GetCachedOrder.Instance;
+	private readonly GetStreamQuery _getStreamQuery = GetStreamQuery.Instance;
 
 	private readonly IServiceProvider _services;
 	private readonly IMediator _mediator;
@@ -37,14 +38,14 @@ public class FoundatioMediatorBenchmarks : IBenchmarks
 	}
 
 	[Benchmark]
-	[Scenario(Scenario.InvokeAsync)]
+	[Scenario(Scenario.Command)]
 	public async ValueTask Command()
 	{
 		await _mediator.InvokeAsync(_pingCommand);
 	}
 
 	[Benchmark]
-	[Scenario(Scenario.InvokeAsyncT)]
+	[Scenario(Scenario.Query)]
 	public async ValueTask<Order> Query()
 	{
 		return await _mediator.InvokeAsync<Order>(_getOrder);
@@ -58,7 +59,7 @@ public class FoundatioMediatorBenchmarks : IBenchmarks
 	}
 
 	[Benchmark]
-	[Scenario(Scenario.InvokeAsyncTWithDI)]
+	[Scenario(Scenario.FullQuery)]
 	public async ValueTask<Order> FullQuery()
 	{
 		return await _mediator.InvokeAsync<Order>(_getFullQuery);
@@ -76,5 +77,20 @@ public class FoundatioMediatorBenchmarks : IBenchmarks
 	public async ValueTask<Order> ShortCircuit()
 	{
 		return await _mediator.InvokeAsync<Order>(_getCachedOrder);
+	}
+
+	[Benchmark]
+	[Scenario(Scenario.StreamQuery)]
+	public async ValueTask StreamQuery()
+	{
+		await foreach (var _ in await _mediator.InvokeAsync<IAsyncEnumerable<Order>>(_getStreamQuery))
+		{
+		}
+	}
+
+	[Scenario(Scenario.StreamFullQuery)]
+	public async ValueTask StreamFullQuery()
+	{
+		throw new NotSupportedException("Unsure if supported in Foundatio");
 	}
 }

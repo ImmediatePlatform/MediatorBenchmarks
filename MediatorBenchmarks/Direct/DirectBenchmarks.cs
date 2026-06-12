@@ -17,6 +17,8 @@ public class DirectBenchmarks : IBenchmarks
 	private readonly GetFullQuery _getFullQuery = GetFullQuery.Instance;
 	private readonly UserRegisteredEvent _userRegisteredEvent = UserRegisteredEvent.Instance;
 	private readonly CreateOrder _createOrder = CreateOrder.Instance;
+	private readonly GetStreamQuery _getStreamQuery = GetStreamQuery.Instance;
+	private readonly GetStreamFullQuery _getStreamFullQuery = GetStreamFullQuery.Instance;
 	private readonly Order _cachedOrder = Order.Instance;
 
 	private readonly DirectCommandHandler _directCommandHandler = new();
@@ -27,16 +29,18 @@ public class DirectBenchmarks : IBenchmarks
 	private readonly DirectCreateOrderHandler _directCreateOrderHandler = new();
 	private readonly DirectFirstOrderCreatedHandler _directFirstOrderCreatedHandler = new();
 	private readonly DirectSecondOrderCreatedHandler _directSecondOrderCreatedHandler = new();
+	private readonly DirectStreamQueryHandler _directStreamQueryHandler = new();
+	private readonly DirectStreamFullQueryHandler _directStreamFullQueryHandler = new(new OrderService());
 
 	[Benchmark]
-	[Scenario(Scenario.InvokeAsync)]
+	[Scenario(Scenario.Command)]
 	public async ValueTask Command()
 	{
 		await _directCommandHandler.HandleAsync(_pingCommand);
 	}
 
 	[Benchmark]
-	[Scenario(Scenario.InvokeAsyncT)]
+	[Scenario(Scenario.Query)]
 	public async ValueTask<Order> Query()
 	{
 		return await _directQueryHandler.HandleAsync(_getOrder);
@@ -51,7 +55,7 @@ public class DirectBenchmarks : IBenchmarks
 	}
 
 	[Benchmark]
-	[Scenario(Scenario.InvokeAsyncTWithDI)]
+	[Scenario(Scenario.FullQuery)]
 	public async ValueTask<Order> FullQuery()
 	{
 		return await _directFullQueryHandler.HandleAsync(_getFullQuery);
@@ -75,5 +79,23 @@ public class DirectBenchmarks : IBenchmarks
 		// awaiting created `ValueTask<>` to remove async state machine as variance between
 		// this test and others
 		return _cachedOrder;
+	}
+
+	[Benchmark]
+	[Scenario(Scenario.StreamQuery)]
+	public async ValueTask StreamQuery()
+	{
+		await foreach (var _ in _directStreamQueryHandler.HandleAsync(_getStreamQuery))
+		{
+		}
+	}
+
+	[Benchmark]
+	[Scenario(Scenario.StreamFullQuery)]
+	public async ValueTask StreamFullQuery()
+	{
+		await foreach (var _ in _directStreamFullQueryHandler.HandleAsync(_getStreamFullQuery))
+		{
+		}
 	}
 }

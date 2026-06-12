@@ -20,6 +20,8 @@ public class MediatRBenchmarks : IBenchmarks
 	private readonly UserRegisteredEvent _userRegisteredEvent = UserRegisteredEvent.Instance;
 	private readonly CreateOrder _createOrder = CreateOrder.Instance;
 	private readonly GetCachedOrder _getCachedOrder = GetCachedOrder.Instance;
+	private readonly GetStreamQuery _getStreamQuery = GetStreamQuery.Instance;
+	private readonly GetStreamFullQuery _getStreamFullQuery = GetStreamFullQuery.Instance;
 
 	private readonly IServiceProvider _services;
 	private readonly IMediator _mediator;
@@ -34,6 +36,7 @@ public class MediatRBenchmarks : IBenchmarks
 				_ = cfg.RegisterServicesFromAssemblyContaining<MediatRBenchmarks>();
 				_ = cfg.AddBehavior<IPipelineBehavior<GetFullQuery, Order>, TimingBehavior<GetFullQuery, Order>>();
 				_ = cfg.AddBehavior<IPipelineBehavior<GetCachedOrder, Order>, ShortCircuitBehavior>();
+				_ = cfg.AddStreamBehavior<IStreamPipelineBehavior<GetStreamFullQuery, Order>, StreamingLoggingBehavior>();
 			})
 			.BuildServiceProvider();
 
@@ -41,14 +44,14 @@ public class MediatRBenchmarks : IBenchmarks
 	}
 
 	[Benchmark]
-	[Scenario(Scenario.InvokeAsync)]
+	[Scenario(Scenario.Command)]
 	public async ValueTask Command()
 	{
 		await _mediator.Send(_pingCommand);
 	}
 
 	[Benchmark]
-	[Scenario(Scenario.InvokeAsyncT)]
+	[Scenario(Scenario.Query)]
 	public async ValueTask<Order> Query()
 	{
 		return await _mediator.Send(_getOrder);
@@ -62,7 +65,7 @@ public class MediatRBenchmarks : IBenchmarks
 	}
 
 	[Benchmark]
-	[Scenario(Scenario.InvokeAsyncTWithDI)]
+	[Scenario(Scenario.FullQuery)]
 	public async ValueTask<Order> FullQuery()
 	{
 		return await _mediator.Send(_getFullQuery);
@@ -80,5 +83,23 @@ public class MediatRBenchmarks : IBenchmarks
 	public async ValueTask<Order> ShortCircuit()
 	{
 		return await _mediator.Send(_getCachedOrder);
+	}
+
+	[Benchmark]
+	[Scenario(Scenario.StreamQuery)]
+	public async ValueTask StreamQuery()
+	{
+		await foreach (var _ in _mediator.CreateStream(_getStreamQuery))
+		{
+		}
+	}
+
+	[Benchmark]
+	[Scenario(Scenario.StreamFullQuery)]
+	public async ValueTask StreamFullQuery()
+	{
+		await foreach (var _ in _mediator.CreateStream(_getStreamFullQuery))
+		{
+		}
 	}
 }

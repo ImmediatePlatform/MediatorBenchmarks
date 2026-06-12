@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using Foundatio.Mediator;
 using MediatorBenchmarks.Shared;
 
@@ -55,6 +56,25 @@ public sealed class FoundatioFullQueryHandler(IOrderService orderService)
 	}
 }
 
+/// <summary>
+/// Simple timing middleware for benchmarking - simulates real-world logging/timing middleware.
+/// Only applies to GetFullQuery (FullQuery benchmark).
+/// </summary>
+[Middleware]
+public static class TimingMiddleware
+{
+	public static Stopwatch Before(GetFullQuery message)
+	{
+		return Stopwatch.StartNew();
+	}
+
+	public static void Finally(GetFullQuery message, Stopwatch? stopwatch)
+	{
+		stopwatch?.Stop();
+		// In real middleware, you'd log here - we just stop the timer for the benchmark
+	}
+}
+
 // Scenario 5: Cascading messages - returns tuple with result + events that auto-publish
 [Handler]
 public sealed class FoundatioCreateOrderHandler
@@ -97,25 +117,6 @@ public sealed class FoundatioShortCircuitHandler
 }
 
 /// <summary>
-/// Simple timing middleware for benchmarking - simulates real-world logging/timing middleware.
-/// Only applies to GetFullQuery (FullQuery benchmark).
-/// </summary>
-[Middleware]
-public static class TimingMiddleware
-{
-	public static Stopwatch Before(GetFullQuery message)
-	{
-		return Stopwatch.StartNew();
-	}
-
-	public static void Finally(GetFullQuery message, Stopwatch? stopwatch)
-	{
-		stopwatch?.Stop();
-		// In real middleware, you'd log here - we just stop the timer for the benchmark
-	}
-}
-
-/// <summary>
 /// Short-circuit middleware that immediately returns a cached result without calling the handler.
 /// This demonstrates middleware returning early (cache hit, validation success with cached result, etc.)
 /// </summary>
@@ -128,5 +129,16 @@ public static class ShortCircuitMiddleware
 	{
 		// Always short-circuit with cached result - simulates cache hit scenario
 		return HandlerResult.ShortCircuit(CachedOrder);
+	}
+}
+
+// Scenario 7: Stream Query Handler
+[Handler]
+public sealed class FoundatioStreamQueryHandler
+{
+	public async IAsyncEnumerable<Order> Handle(GetStreamQuery query, [EnumeratorCancellation] CancellationToken cancellationToken = default)
+	{
+		foreach (var _ in Enumerable.Range(1, 3))
+			yield return new Order(query.Id, 99.99m);
 	}
 }

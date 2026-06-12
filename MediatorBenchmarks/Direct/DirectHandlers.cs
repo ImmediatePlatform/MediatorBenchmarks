@@ -1,4 +1,6 @@
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
 using MediatorBenchmarks.Shared;
 
 namespace MediatorBenchmarks.Direct;
@@ -90,5 +92,42 @@ public sealed class DirectShortCircuitHandler
 	{
 		// This should never be called - middleware short-circuits before reaching handler
 		throw new InvalidOperationException("Short-circuit middleware should have prevented this call");
+	}
+}
+
+// Scenario 7: Stream Query Handler
+public sealed class DirectStreamQueryHandler
+{
+	public async IAsyncEnumerable<Order> HandleAsync(GetStreamQuery query, [EnumeratorCancellation] CancellationToken cancellationToken = default)
+	{
+		foreach (var _ in Enumerable.Range(1, 3))
+			yield return new Order(query.Id, 99.99m);
+	}
+}
+
+// Scenario 8: Stream Query handler with dependency injection
+public sealed class DirectStreamFullQueryHandler(IOrderService orderService)
+{
+	private readonly TextWriter _writer = TextWriter.Null;
+
+	[SuppressMessage("Usage", "MA0040:Forward the CancellationToken parameter to methods that take one", Justification = "WriteLineAsync() doesn't have a proper method")]
+	[SuppressMessage("Reliability", "CA2016:Forward the 'CancellationToken' parameter to methods", Justification = "WriteLineAsync() doesn't have a proper method")]
+	public async IAsyncEnumerable<Order> HandleAsync(GetStreamFullQuery query, [EnumeratorCancellation] CancellationToken cancellationToken = default)
+	{
+		await _writer.WriteLineAsync("-- Handling StreamRequest");
+
+		await foreach (var response in GetStream(query, cancellationToken))
+		{
+			await _writer.WriteLineAsync($"-- Process Item {response}");
+			yield return response;
+		}
+
+		await _writer.WriteLineAsync("-- Finished StreamRequest");
+	}
+
+	private async IAsyncEnumerable<Order> GetStream(GetStreamFullQuery query, [EnumeratorCancellation] CancellationToken cancellationToken = default)
+	{
+		foreach (var _ in Enumerable.Range(1, 3))
+			yield return await orderService.GetOrderAsync(query.Id, cancellationToken);
 	}
 }

@@ -1,6 +1,8 @@
 using System.Diagnostics;
 using MediatorBenchmarks.Shared;
 using Mediator;
+using System.Runtime.CompilerServices;
+using System.Diagnostics.CodeAnalysis;
 
 namespace MediatorBenchmarks.MediatorNet;
 
@@ -113,5 +115,45 @@ public sealed class MediatorNetShortCircuitBehavior : IPipelineBehavior<GetCache
 	{
 		// Short-circuit by returning cached value - never calls next()
 		return _cachedOrder;
+	}
+}
+
+// Scenario 7: Stream Query Handler
+public sealed partial class MediatorNetStreamQueryHandler : IStreamQueryHandler<GetStreamQuery, Order>
+{
+	public async IAsyncEnumerable<Order> Handle(GetStreamQuery query, [EnumeratorCancellation] CancellationToken cancellationToken)
+	{
+		foreach (var _ in Enumerable.Range(1, 3))
+			yield return new Order(query.Id, 99.99m);
+	}
+}
+
+// Scenario 8: Stream Query handler with dependency injection
+public sealed class StreamingLoggingBehavior : IStreamPipelineBehavior<GetStreamFullQuery, Order>
+{
+	private readonly TextWriter _writer = TextWriter.Null;
+
+	[SuppressMessage("Usage", "MA0040:Forward the CancellationToken parameter to methods that take one", Justification = "WriteLineAsync() doesn't have a proper method")]
+	[SuppressMessage("Reliability", "CA2016:Forward the 'CancellationToken' parameter to methods", Justification = "WriteLineAsync() doesn't have a proper method")]
+	public async IAsyncEnumerable<Order> Handle(GetStreamFullQuery request, StreamHandlerDelegate<GetStreamFullQuery, Order> next, [EnumeratorCancellation] CancellationToken cancellationToken)
+	{
+		await _writer.WriteLineAsync("-- Handling StreamRequest");
+
+		await foreach (var response in next(request, cancellationToken))
+		{
+			await _writer.WriteLineAsync($"-- Process Item {response}");
+			yield return response;
+		}
+
+		await _writer.WriteLineAsync("-- Finished StreamRequest");
+	}
+}
+
+public sealed partial class MediatorNetStreamFullQueryHandler(IOrderService orderService) : IStreamQueryHandler<GetStreamFullQuery, Order>
+{
+	public async IAsyncEnumerable<Order> Handle(GetStreamFullQuery query, [EnumeratorCancellation] CancellationToken cancellationToken)
+	{
+		foreach (var _ in Enumerable.Range(1, 3))
+			yield return await orderService.GetOrderAsync(query.Id, cancellationToken);
 	}
 }

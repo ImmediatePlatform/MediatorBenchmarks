@@ -40,17 +40,17 @@ public class AxentBenchmarks : IBenchmarks
 	}
 
 	[Benchmark]
-	[Scenario(Scenario.InvokeAsync)]
+	[Scenario(Scenario.Command)]
 	public async ValueTask Command()
 	{
 		_ = await _sender.SendAsync(_pingCommand, default);
 	}
 
 	[Benchmark]
-	[Scenario(Scenario.InvokeAsyncT)]
+	[Scenario(Scenario.Query)]
 	public async ValueTask<Order> Query()
 	{
-		return (await _sender.SendAsync<Order>(_getOrder, default)).Value!;
+		return (await _sender.SendAsync(_getOrder, default)).Value!;
 	}
 
 	public async ValueTask Publish()
@@ -59,7 +59,7 @@ public class AxentBenchmarks : IBenchmarks
 	}
 
 	[Benchmark]
-	[Scenario(Scenario.InvokeAsyncTWithDI)]
+	[Scenario(Scenario.FullQuery)]
 	public async ValueTask<Order> FullQuery()
 	{
 		return (await _sender.SendAsync(_getFullQuery, default)).Value!;
@@ -75,5 +75,17 @@ public class AxentBenchmarks : IBenchmarks
 	public async ValueTask<Order> ShortCircuit()
 	{
 		return (await _sender.SendAsync(_getCachedOrder, default)).Value!;
+	}
+
+	[Scenario(Scenario.StreamQuery)]
+	public async ValueTask StreamQuery()
+	{
+		throw new NotSupportedException("Unsupported in Axent");
+	}
+
+	[Scenario(Scenario.StreamFullQuery)]
+	public async ValueTask StreamFullQuery()
+	{
+		throw new NotSupportedException("Unsupported in Axent");
 	}
 }

@@ -1,5 +1,6 @@
 using DispatchR.Abstractions.Notification;
 using DispatchR.Abstractions.Send;
+using DispatchR.Abstractions.Stream;
 
 namespace MediatorBenchmarks.Shared;
 
@@ -23,3 +24,9 @@ public sealed partial record OrderCreatedEvent : INotification;
 // Scenario 6: Short-circuit / Cache-hit - tests middleware that returns early without calling handler
 // Each library implements this with their idiomatic approach:
 public sealed partial record GetCachedOrder : IRequest<GetCachedOrder, ValueTask<Order>>;
+
+// Scenario 7: Streaming query
+public sealed partial record GetStreamQuery : IStreamRequest<GetStreamQuery, Order>;
+
+// Scenario 8: Streaming query with DI
+public sealed partial record GetStreamFullQuery : IStreamRequest<GetStreamFullQuery, Order>;

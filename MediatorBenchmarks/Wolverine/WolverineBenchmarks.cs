@@ -66,14 +66,14 @@ public class WolverineBenchmarks : IBenchmarks
 	}
 
 	[Benchmark]
-	[Scenario(Scenario.InvokeAsync)]
+	[Scenario(Scenario.Command)]
 	public async ValueTask Command()
 	{
 		await _bus.InvokeAsync(_pingCommand);
 	}
 
 	[Benchmark]
-	[Scenario(Scenario.InvokeAsyncT)]
+	[Scenario(Scenario.Query)]
 	public async ValueTask<Order> Query()
 	{
 		return await _bus.InvokeAsync<Order>(_getOrder);
@@ -87,7 +87,7 @@ public class WolverineBenchmarks : IBenchmarks
 	}
 
 	[Benchmark]
-	[Scenario(Scenario.InvokeAsyncTWithDI)]
+	[Scenario(Scenario.FullQuery)]
 	public async ValueTask<Order> FullQuery()
 	{
 		return await _bus.InvokeAsync<Order>(_getFullQuery);
@@ -105,5 +105,17 @@ public class WolverineBenchmarks : IBenchmarks
 	public async ValueTask<Order> ShortCircuit()
 	{
 		return await _bus.InvokeAsync<Order>(_getCachedOrder);
+	}
+
+	[Scenario(Scenario.StreamQuery)]
+	public async ValueTask StreamQuery()
+	{
+		throw new NotSupportedException("Unsupported in Wolverine");
+	}
+
+	[Scenario(Scenario.StreamFullQuery)]
+	public async ValueTask StreamFullQuery()
+	{
+		throw new NotSupportedException("Unsupported in Wolverine");
 	}
 }

@@ -36,35 +36,15 @@ public enum Scenario
 {
 	None,
 
-	// Message
-
-	/// <summary>
-	///		InvokeAsync without response (Command)
-	/// </summary>
-	InvokeAsync,
-
-	/// <summary>
-	///		InvokeAsync&lt;T&gt; (Query)
-	/// </summary>
-	InvokeAsyncT,
-
-	/// <summary>
-	///		PublishAsync with a single handler
-	/// </summary>
+	// single response
+	Command,
+	Query,
 	Publish,
-
-	/// <summary>
-	///		InvokeAsync&lt;T&gt; with DI and middleware
-	/// </summary>
-	InvokeAsyncTWithDI,
-
-	/// <summary>
-	///		Cascading messages - invoke returns result and auto-publishes events to multiple handlers
-	/// </summary>
+	FullQuery,
 	CascadingMessages,
-
-	/// <summary>
-	///		Short-circuit middleware - returns cached result, handler is never invoked
-	/// </summary>
 	ShortCircuit,
+
+	// stream response
+	StreamQuery,
+	StreamFullQuery,
 }

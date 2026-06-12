@@ -38,3 +38,15 @@ public sealed partial record GetCachedOrder(int Id)
 {
 	public static GetCachedOrder Instance { get; } = new(42);
 }
+
+// Scenario 7: Streaming query
+public sealed partial record GetStreamQuery(int Id)
+{
+	public static GetStreamQuery Instance { get; } = new(42);
+}
+
+// Scenario 8: Streaming query with DI
+public sealed partial record GetStreamFullQuery(int Id)
+{
+	public static GetStreamFullQuery Instance { get; } = new(42);
+}

@@ -49,10 +49,10 @@ public class MassTransitBenchmarks : IBenchmarks
 					_ = cfg.AddConsumer<MassTransitShortCircuitConsumer>();
 
 					cfg.ConfigureMediator((context, mcfg) =>
-						{
-							mcfg.UseConsumeFilter(typeof(MassTransitTimingFilter<>), context);
-							mcfg.UseConsumeFilter(typeof(MassTransitShortCircuitFilter<>), context);
-						});
+					{
+						mcfg.UseConsumeFilter(typeof(MassTransitTimingFilter<>), context);
+						mcfg.UseConsumeFilter(typeof(MassTransitShortCircuitFilter<>), context);
+					});
 				}
 			)
 			.BuildServiceProvider();
@@ -65,14 +65,14 @@ public class MassTransitBenchmarks : IBenchmarks
 	}
 
 	[Benchmark]
-	[Scenario(Scenario.InvokeAsync)]
+	[Scenario(Scenario.Command)]
 	public async ValueTask Command()
 	{
 		await _mediator.Send(_pingCommand);
 	}
 
 	[Benchmark]
-	[Scenario(Scenario.InvokeAsyncT)]
+	[Scenario(Scenario.Query)]
 	public async ValueTask<Order> Query()
 	{
 		var response = await _masstransitQueryClient.GetResponse<Order>(_getOrder);
@@ -87,7 +87,7 @@ public class MassTransitBenchmarks : IBenchmarks
 	}
 
 	[Benchmark]
-	[Scenario(Scenario.InvokeAsyncTWithDI)]
+	[Scenario(Scenario.FullQuery)]
 	public async ValueTask<Order> FullQuery()
 	{
 		var response = await _masstransitFullQueryClient.GetResponse<Order>(_getFullQuery);
@@ -108,5 +108,17 @@ public class MassTransitBenchmarks : IBenchmarks
 	{
 		var response = await _masstransitShortCircuitClient.GetResponse<Order>(_getCachedOrder);
 		return response.Message;
+	}
+
+	[Scenario(Scenario.StreamQuery)]
+	public async ValueTask StreamQuery()
+	{
+		throw new NotSupportedException("MassTransit doesn't support streaming handlers, as far as I can tell.");
+	}
+
+	[Scenario(Scenario.StreamFullQuery)]
+	public async ValueTask StreamFullQuery()
+	{
+		throw new NotSupportedException("MassTransit doesn't support streaming handlers, as far as I can tell.");
 	}
 }

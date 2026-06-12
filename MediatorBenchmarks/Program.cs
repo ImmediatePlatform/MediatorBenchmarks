@@ -15,14 +15,15 @@ await BenchmarkRunner.RunAsync(
 		.AddLogicalGroupRules([BenchmarkLogicalGroupRule.ByCategory])
 );
 
+#elif !NET10_0_OR_GREATER
+Console.WriteLine("Benchmarks must be run in `net10.0`");
+
 #elif !RELEASE
 using MediatorBenchmarks.Shared;
 
 var benchmarks = new List<IBenchmarks>()
 {
-#if NET10_0_OR_GREATER
 	new MediatorBenchmarks.Axent.AxentBenchmarks(),
-#endif
 	new MediatorBenchmarks.Direct.DirectBenchmarks(),
 	new MediatorBenchmarks.DispatchR.DispatchRBenchmarks(),
 	new MediatorBenchmarks.FoundatioMediator.FoundatioMediatorBenchmarks(),
@@ -30,17 +31,12 @@ var benchmarks = new List<IBenchmarks>()
 	new MediatorBenchmarks.MassTransit.MassTransitBenchmarks(),
 	new MediatorBenchmarks.MediatorNet.MediatorNetBenchmarks(),
 	new MediatorBenchmarks.MediatR.MediatRBenchmarks(),
-#if NET10_0_OR_GREATER
 	new MediatorBenchmarks.Wolverine.WolverineBenchmarks(),
-#endif
 };
 
 foreach (var benchmark in benchmarks)
 	await benchmark.Validate();
 
 Console.WriteLine("All Benchmarks operate successfully. Switch to `RELEASE` to benchmark.");
-
-#elif !NET10_0_OR_GREATER
-Console.WriteLine("Benchmarks must be run in `net10.0`");
 
 #endif

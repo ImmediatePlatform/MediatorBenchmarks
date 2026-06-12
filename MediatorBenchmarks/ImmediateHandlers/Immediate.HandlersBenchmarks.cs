@@ -19,6 +19,8 @@ public class ImmediateHandlersBenchmarks : IBenchmarks
 	private readonly UserRegisteredEvent _userRegisteredEvent = UserRegisteredEvent.Instance;
 	private readonly CreateOrder _createOrder = CreateOrder.Instance;
 	private readonly GetCachedOrder _getCachedOrder = GetCachedOrder.Instance;
+	private readonly GetStreamQuery _getStreamQuery = GetStreamQuery.Instance;
+	private readonly GetStreamFullQuery _getStreamFullQuery = GetStreamFullQuery.Instance;
 
 	private readonly IServiceProvider _services;
 	private readonly ImmediateHandlersCommandHandler.Handler _immediateHandlersCommandHandler;
@@ -27,6 +29,8 @@ public class ImmediateHandlersBenchmarks : IBenchmarks
 	private readonly ImmediateHandlersFullQuery.Handler _immediateHandlersFullQueryHandler;
 	private readonly ImmediateHandlersCreateOrderConsumer.Handler _immediateHandlersCreateOrderConsumer;
 	private readonly ImmediateHandlersShortCircuitHandler.Handler _immediateHandlersShortCircuitHandler;
+	private readonly ImmediateHandlersStreamQueryHandler.Handler _immediateHandlersStreamQueryHandler;
+	private readonly ImmediateHandlersStreamFullQueryHandler.Handler _immediateHandlersStreamFullQueryHandler;
 
 	public ImmediateHandlersBenchmarks()
 	{
@@ -44,17 +48,19 @@ public class ImmediateHandlersBenchmarks : IBenchmarks
 		_immediateHandlersFullQueryHandler = _services.GetRequiredService<ImmediateHandlersFullQuery.Handler>();
 		_immediateHandlersCreateOrderConsumer = _services.GetRequiredService<ImmediateHandlersCreateOrderConsumer.Handler>();
 		_immediateHandlersShortCircuitHandler = _services.GetRequiredService<ImmediateHandlersShortCircuitHandler.Handler>();
+		_immediateHandlersStreamQueryHandler = _services.GetRequiredService<ImmediateHandlersStreamQueryHandler.Handler>();
+		_immediateHandlersStreamFullQueryHandler = _services.GetRequiredService<ImmediateHandlersStreamFullQueryHandler.Handler>();
 	}
 
 	[Benchmark]
-	[Scenario(Scenario.InvokeAsync)]
+	[Scenario(Scenario.Command)]
 	public async ValueTask Command()
 	{
 		_ = await _immediateHandlersCommandHandler.HandleAsync(_pingCommand);
 	}
 
 	[Benchmark]
-	[Scenario(Scenario.InvokeAsyncT)]
+	[Scenario(Scenario.Query)]
 	public async ValueTask<Order> Query()
 	{
 		return await _immediateHandlersQueryHandler.HandleAsync(_getOrder);
@@ -68,7 +74,7 @@ public class ImmediateHandlersBenchmarks : IBenchmarks
 	}
 
 	[Benchmark]
-	[Scenario(Scenario.InvokeAsyncTWithDI)]
+	[Scenario(Scenario.FullQuery)]
 	public async ValueTask<Order> FullQuery()
 	{
 		return await _immediateHandlersFullQueryHandler.HandleAsync(_getFullQuery);
@@ -86,5 +92,23 @@ public class ImmediateHandlersBenchmarks : IBenchmarks
 	public async ValueTask<Order> ShortCircuit()
 	{
 		return await _immediateHandlersShortCircuitHandler.HandleAsync(_getCachedOrder);
+	}
+
+	[Benchmark]
+	[Scenario(Scenario.StreamQuery)]
+	public async ValueTask StreamQuery()
+	{
+		await foreach (var _ in _immediateHandlersStreamQueryHandler.HandleAsync(_getStreamQuery))
+		{
+		}
+	}
+
+	[Benchmark]
+	[Scenario(Scenario.StreamFullQuery)]
+	public async ValueTask StreamFullQuery()
+	{
+		await foreach (var _ in _immediateHandlersStreamFullQueryHandler.HandleAsync(_getStreamFullQuery))
+		{
+		}
 	}
 }

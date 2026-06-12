@@ -1,3 +1,5 @@
+using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
 using Immediate.Handlers.Shared;
 using MediatorBenchmarks.Shared;
 using Microsoft.Extensions.DependencyInjection;
@@ -133,5 +135,48 @@ public sealed partial class ImmediateHandlersShortCircuitHandler
 	{
 		// This should never be called - middleware short-circuits before reaching handler
 		throw new InvalidOperationException("Short-circuit middleware should have prevented this call");
+	}
+}
+
+// Scenario 7: Stream Query Handler
+[Handler]
+public sealed partial class ImmediateHandlersStreamQueryHandler
+{
+	private async IAsyncEnumerable<Order> Handle(GetStreamQuery query, [EnumeratorCancellation] CancellationToken cancellationToken = default)
+	{
+		foreach (var _ in Enumerable.Range(1, 3))
+			yield return new Order(query.Id, 99.99m);
+	}
+}
+
+// Scenario 8: Stream Query handler with dependency injection
+public sealed class StreamingLoggingBehavior : StreamingBehavior<GetStreamFullQuery, Order>
+{
+	private readonly TextWriter _writer = TextWriter.Null;
+
+	[SuppressMessage("Usage", "MA0040:Forward the CancellationToken parameter to methods that take one", Justification = "WriteLineAsync() doesn't have a proper method")]
+	[SuppressMessage("Reliability", "CA2016:Forward the 'CancellationToken' parameter to methods", Justification = "WriteLineAsync() doesn't have a proper method")]
+	public override async IAsyncEnumerable<Order> HandleAsync(GetStreamFullQuery request, [EnumeratorCancellation] CancellationToken cancellationToken)
+	{
+		await _writer.WriteLineAsync("-- Handling StreamRequest");
+
+		await foreach (var response in Next(request, cancellationToken))
+		{
+			await _writer.WriteLineAsync($"-- Process Item {response}");
+			yield return response;
+		}
+
+		await _writer.WriteLineAsync("-- Finished StreamRequest");
+	}
+}
+
+[Handler]
+[Behaviors(typeof(StreamingLoggingBehavior))]
+public sealed partial class ImmediateHandlersStreamFullQueryHandler(IOrderService orderService)
+{
+	private async IAsyncEnumerable<Order> Handle(GetStreamFullQuery query, [EnumeratorCancellation] CancellationToken cancellationToken = default)
+	{
+		foreach (var _ in Enumerable.Range(1, 3))
+			yield return await orderService.GetOrderAsync(query.Id, cancellationToken);
 	}
 }

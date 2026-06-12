@@ -8,6 +8,9 @@ public interface IBenchmarks
 	ValueTask Publish();
 	ValueTask<Order> Query();
 	ValueTask<Order> ShortCircuit();
+
+	ValueTask StreamQuery();
+	ValueTask StreamFullQuery();
 }
 
 public static class BenchmarkExtensions
@@ -20,6 +23,8 @@ public static class BenchmarkExtensions
 		await Validate(benchmark.FullQuery);
 		await Validate(benchmark.CascadingMessages);
 		await Validate(benchmark.ShortCircuit);
+		await Validate(benchmark.StreamQuery);
+		await Validate(benchmark.StreamFullQuery);
 	}
 
 	private static async ValueTask Validate(Func<ValueTask> action)

@@ -1,4 +1,5 @@
 using System.Reflection;
+using Axent.Abstractions.Models;
 using Axent.Abstractions.Services;
 using Axent.Core.DependencyInjection;
 using BenchmarkDotNet.Attributes;
@@ -21,7 +22,10 @@ public class AxentBenchmarks : IBenchmarks
 	private readonly GetCachedOrder _getCachedOrder = GetCachedOrder.Instance;
 
 	private readonly IServiceProvider _services;
-	private readonly ISender _sender;
+	private readonly IRequestSender<PingCommand, Unit> _axentCommandHandler;
+	private readonly IRequestSender<GetOrder, Order> _axentQueryHander;
+	private readonly IRequestSender<GetFullQuery, Order> _axentFullQueryHandler;
+	private readonly IRequestSender<GetCachedOrder, Order> _axentShortCircuitHandler;
 
 	public AxentBenchmarks()
 	{
@@ -36,21 +40,24 @@ public class AxentBenchmarks : IBenchmarks
 
 		_services = services.BuildServiceProvider();
 
-		_sender = _services.GetRequiredService<ISender>();
+		_axentCommandHandler = _services.GetRequiredService<IRequestSender<PingCommand, Unit>>();
+		_axentQueryHander = _services.GetRequiredService<IRequestSender<GetOrder, Order>>();
+		_axentFullQueryHandler = _services.GetRequiredService<IRequestSender<GetFullQuery, Order>>();
+		_axentShortCircuitHandler = _services.GetRequiredService<IRequestSender<GetCachedOrder, Order>>();
 	}
 
 	[Benchmark]
 	[Scenario(Scenario.Command)]
 	public async ValueTask Command()
 	{
-		_ = await _sender.SendAsync(_pingCommand, default);
+		_ = await _axentCommandHandler.SendAsync(_pingCommand, default);
 	}
 
 	[Benchmark]
 	[Scenario(Scenario.Query)]
 	public async ValueTask<Order> Query()
 	{
-		return (await _sender.SendAsync(_getOrder, default)).Value!;
+		return (await _axentQueryHander.SendAsync(_getOrder, default)).Value!;
 	}
 
 	public async ValueTask Publish()
@@ -62,7 +69,7 @@ public class AxentBenchmarks : IBenchmarks
 	[Scenario(Scenario.FullQuery)]
 	public async ValueTask<Order> FullQuery()
 	{
-		return (await _sender.SendAsync(_getFullQuery, default)).Value!;
+		return (await _axentFullQueryHandler.SendAsync(_getFullQuery, default)).Value!;
 	}
 
 	public async ValueTask<Order> CascadingMessages()
@@ -74,7 +81,7 @@ public class AxentBenchmarks : IBenchmarks
 	[Scenario(Scenario.ShortCircuit)]
 	public async ValueTask<Order> ShortCircuit()
 	{
-		return (await _sender.SendAsync(_getCachedOrder, default)).Value!;
+		return (await _axentShortCircuitHandler.SendAsync(_getCachedOrder, default)).Value!;
 	}
 
 	[Scenario(Scenario.StreamQuery)]

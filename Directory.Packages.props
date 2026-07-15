@@ -9,7 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
-	<PackageVersion Include="Axent.Core" Version="3.0.0" />
+	<PackageVersion Include="Axent.Core" Version="4.0.0" />
 	<PackageVersion Include="BenchmarkDotNet" Version="0.16.0-nightly.20260608.560" />
 	<PackageVersion Include="DispatchR.Mediator" Version="2.3.0" />
 	<PackageVersion Include="Foundatio.Mediator" Version="1.2.1" />

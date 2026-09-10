@@ -36,7 +36,6 @@ public class ImmediateHandlersBenchmarks : IBenchmarks
 	{
 		// Setup IH
 		_services = new ServiceCollection()
-			.AddMediatorBenchmarksBehaviors()
 			.AddMediatorBenchmarksHandlers()
 			.AddSingleton<IOrderService, OrderService>()
 			.AddScoped(typeof(Publisher<>))
